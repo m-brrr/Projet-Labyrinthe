@@ -1,4 +1,4 @@
-#include "labyrinthe.h"
+#include "labyrinthe.hpp"
 #include <iostream>
 #include <algorithm> // Pour std::shuffle
 #include <vector>
@@ -50,10 +50,10 @@ void labyrinthe::dfs_generation(int ligne, int col) {
 
     // Définir les 4 directions de mouvement (sauts de 2)
     vector<pair<int, int>> directions = {
-        {0, 1},   // Droite
-        {0, -1},  // Gauche
-        {1, 0},   // Bas
-        {-1, 0}   // Haut
+        {0, 2},   // Droite
+        {0, -2},  // Gauche
+        {2, 0},   // Bas
+        {-2, 0}   // Haut
     };
 
     // Mélanger aléatoirement l'ordre des directions (l'essence de l'aléatoire)
@@ -72,8 +72,8 @@ void labyrinthe::dfs_generation(int ligne, int col) {
             grille_[nouvelle_ligne][nouvelle_col] == MUR) {
 
             // 1. Casser le mur entre l'ancienne et la nouvelle cellule
-            int mur_a_casser_ligne = ligne + dl;
-            int mur_a_casser_col = col + dc;
+            int mur_a_casser_ligne = ligne + dl/2;
+            int mur_a_casser_col = col + dc/2;
             grille_[mur_a_casser_ligne][mur_a_casser_col] = CHEMIN;
 
             // 2. Continuer récursivement (Parcours en Profondeur)

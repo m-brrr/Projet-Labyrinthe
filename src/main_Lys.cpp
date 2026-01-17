@@ -1,4 +1,4 @@
-#include "labyrinthe.h"
+#include "labyrinthe.hpp"
 #include <iostream>
 
 int main() {
