@@ -32,11 +32,10 @@ inline int convertToNumberSpell (Direction maDirection){
 
 inline sf::Vector2f spellProduction(Direction maDirection) {
 	switch(maDirection) {
-		case Direction::Down : return sf::Vector2f(321.f,0.f);
-		case Direction::Left : return sf::Vector2f(0.f, 221.f);
-		case Direction::Right : return sf::Vector2f(362.f, 301.f);
-		case Direction::Up : return sf::Vector2f(401.f, 262.f);
-
+		case Direction::Down : return sf::Vector2f(400.f,365.f);
+		case Direction::Left : return sf::Vector2f(335.f, 300.f);
+		case Direction::Right : return sf::Vector2f(465.f, 300.f);
+		case Direction::Up : return sf::Vector2f(400.f, 235.f);
 	}
 	throw "this is an exception";
 }

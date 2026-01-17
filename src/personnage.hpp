@@ -65,7 +65,9 @@ class personnage {
 					}
 				}
 			//On positionne le centre du personnage sur le centre de l'écran
-				character.setPosition(362.f, 262.f);
+				character.setTextureRect(postures[0][0]);
+				character.setOrigin(character.getLocalBounds().width / 2.f, character.getLocalBounds().height / 2.f);
+				character.setPosition(400.f, 300.f);
 				
 
 		}

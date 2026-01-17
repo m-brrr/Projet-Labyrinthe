@@ -75,7 +75,8 @@ void GameState::update(float dt)  {
 			                    pcharacter->take_damage(pspell->getSpellLevel());
 			                }
 			            }*/
-
+						
+						
 						for (auto it = spells.begin(); it != spells.end(); ) {
 							(*it)->setPosition(dt, LabyMov);
 							(*it)->Spell_animateMov();
@@ -86,7 +87,10 @@ void GameState::update(float dt)  {
 						    } else {
 						        ++it; // Passe au sort suivant
 						    }
+								
 						}
+						
+							
 					}
 
 void GameState::render() {		//méthode pour tout afficher

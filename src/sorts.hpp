@@ -53,9 +53,17 @@ class Spell {
 				}
 
 			//On positionne le sort sur l'écran
-				theSpellSprite.setPosition(spellProduction(maDirection));
+				theSpellSprite.setTextureRect(animationArray[0]);
+				theSpellSprite.setOrigin(theSpellSprite.getLocalBounds().width / 2.f, theSpellSprite.getLocalBounds().height / 2.f);
 				theSpellSprite.setScale(0.1,0.1);
-				theSpellSprite.setRotation(90.f*(convertToNumberSpell(maDirection)+3));
+
+				theSpellSprite.setRotation(90.f*(convertToNumberSpell(maDirection)+3));	//Rotation par rapport à l'origine (ie au centre du spell)
+				theSpellSprite.setPosition(spellProduction(maDirection));
+				
+		
+
+				
+				
 		}
 
 		~Spell() { std::cout << "Destructeur appelé pour le sort !" << std::endl; }
