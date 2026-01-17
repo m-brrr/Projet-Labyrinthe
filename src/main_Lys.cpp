@@ -9,7 +9,7 @@ int main() {
     std::cout << "Demarrage de la generation du labyrinthe aleatoire..." << std::endl;
     
     // Créer un objet Labyrinthe. La generation DFS est lancee ici !
-    labyrinthe mon_laby(H, L); 
+    grilleLabyrinthe mon_laby(H, L); 
 
     // Afficher le labyrinthe généré
     mon_laby.afficher();

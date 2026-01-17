@@ -153,6 +153,30 @@ src/etats_jeu.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/projet_labyrinthe.dir/build.make CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.s
 .PHONY : src/etats_jeu.cpp.s
 
+src/labyrinthe.o: src/labyrinthe.cpp.o
+.PHONY : src/labyrinthe.o
+
+# target to build an object file
+src/labyrinthe.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projet_labyrinthe.dir/build.make CMakeFiles/projet_labyrinthe.dir/src/labyrinthe.cpp.o
+.PHONY : src/labyrinthe.cpp.o
+
+src/labyrinthe.i: src/labyrinthe.cpp.i
+.PHONY : src/labyrinthe.i
+
+# target to preprocess a source file
+src/labyrinthe.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projet_labyrinthe.dir/build.make CMakeFiles/projet_labyrinthe.dir/src/labyrinthe.cpp.i
+.PHONY : src/labyrinthe.cpp.i
+
+src/labyrinthe.s: src/labyrinthe.cpp.s
+.PHONY : src/labyrinthe.s
+
+# target to generate assembly for a file
+src/labyrinthe.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/projet_labyrinthe.dir/build.make CMakeFiles/projet_labyrinthe.dir/src/labyrinthe.cpp.s
+.PHONY : src/labyrinthe.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -189,6 +213,9 @@ help:
 	@echo "... src/etats_jeu.o"
 	@echo "... src/etats_jeu.i"
 	@echo "... src/etats_jeu.s"
+	@echo "... src/labyrinthe.o"
+	@echo "... src/labyrinthe.i"
+	@echo "... src/labyrinthe.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

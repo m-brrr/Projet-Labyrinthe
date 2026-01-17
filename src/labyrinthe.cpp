@@ -9,7 +9,7 @@ using namespace std;
 // Constructeur
 // -------------------------------------------------------------------
 
-labyrinthe::labyrinthe(int h, int l) {
+grilleLabyrinthe::grilleLabyrinthe(int h, int l) {
     // S'assurer que les dimensions sont impaires pour le DFS
     hauteur_ = (h % 2 == 0) ? h + 1 : h;
     largeur_ = (l % 2 == 0) ? l + 1 : l;
@@ -33,7 +33,7 @@ labyrinthe::labyrinthe(int h, int l) {
 // Initialisation
 // -------------------------------------------------------------------
 
-void labyrinthe::initialiser_grille() {
+void grilleLabyrinthe::initialiser_grille() {
     for (int i = 0; i < hauteur_; ++i) {
         for (int j = 0; j < largeur_; ++j) {
             grille_[i][j] = MUR; 
@@ -45,7 +45,7 @@ void labyrinthe::initialiser_grille() {
 // Algorithme de Génération (DFS Récursif)
 // -------------------------------------------------------------------
 
-void labyrinthe::dfs_generation(int ligne, int col) {
+void grilleLabyrinthe::dfs_generation(int ligne, int col) {
     grille_[ligne][col] = CHEMIN; // La cellule actuelle devient un chemin
 
     // Définir les 4 directions de mouvement (sauts de 2)
@@ -86,7 +86,7 @@ void labyrinthe::dfs_generation(int ligne, int col) {
 // Affichage
 // -------------------------------------------------------------------
 
-void labyrinthe::afficher() const {
+void grilleLabyrinthe::afficher() const {
     cout << "--- Labyrinthe Genere (" << hauteur_ << "x" << largeur_ << ") ---" << endl;
     for (int i = 0; i < hauteur_; ++i) {
         for (int j = 0; j < largeur_; ++j) {

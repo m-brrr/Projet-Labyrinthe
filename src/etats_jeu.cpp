@@ -37,32 +37,32 @@ void GameState::update(float dt)  {
 					sf::Vector2f LabyMov;
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))	
 			            {
-							monlaby.moveLabyrinthe(dt, Direction::Left);
-							LabyMov=monlaby.getMov(dt, Direction::Left);
+							theMap.moveTheMap(dt, Direction::Left);
+							LabyMov=theMap.getMov(dt, Direction::Left);
 
 							monPerso.setDirection(Direction::Left);
 							monPerso.perso_animateMov();
 						}
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			            {
-							monlaby.moveLabyrinthe(dt, Direction::Right);
-							LabyMov=monlaby.getMov(dt, Direction::Right);
+							theMap.moveTheMap(dt, Direction::Right);
+							LabyMov=theMap.getMov(dt, Direction::Right);
 
 							monPerso.setDirection(Direction::Right);
 							monPerso.perso_animateMov();
 						}
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			            {
-							monlaby.moveLabyrinthe(dt, Direction::Up);
-							LabyMov=monlaby.getMov(dt, Direction::Up);
+							theMap.moveTheMap(dt, Direction::Up);
+							LabyMov=theMap.getMov(dt, Direction::Up);
 
 							monPerso.setDirection(Direction::Up);
 							monPerso.perso_animateMov();
 						}
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			            {
-							monlaby.moveLabyrinthe(dt, Direction::Down);
-							LabyMov=monlaby.getMov(dt, Direction::Down);
+							theMap.moveTheMap(dt, Direction::Down);
+							LabyMov=theMap.getMov(dt, Direction::Down);
 
 							monPerso.setDirection(Direction::Down);
 							monPerso.perso_animateMov();
@@ -96,7 +96,7 @@ void GameState::update(float dt)  {
 void GameState::render() {		//méthode pour tout afficher
 			window.clear();
 			//window.draw(background);
-			monlaby.drawLabyrinthe(window);
+			window.draw(theMap);
 			monPerso.afficher_perso(window);
 			for (const auto& pspell : spells) {  // 'spellPtr' est un std::unique_ptr<Spell>
     					pspell->afficherSort(window);            // Utilise '->' pour appeler la méthode

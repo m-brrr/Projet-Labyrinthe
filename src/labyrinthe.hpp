@@ -6,8 +6,9 @@
 #include <utility> // Pour std::pair
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include "enum_types.hpp"
 
-class labyrinthe {
+class grilleLabyrinthe {
 	private:
 	    // --- Attributs ---
 	    int hauteur_;
@@ -43,7 +44,7 @@ class labyrinthe {
 	     * @param h Hauteur souhaitée (sera ajustée à la plus proche impaire si paire).
 	     * @param l Largeur souhaitée (sera ajustée à la plus proche impaire si paire).
 	     */
-	    labyrinthe(int h, int l);
+	    grilleLabyrinthe(int h, int l);
 	    
 	    // --- Méthodes Publiques ---
 	    

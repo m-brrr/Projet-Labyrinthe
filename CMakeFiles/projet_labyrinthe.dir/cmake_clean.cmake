@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o"
   "CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o.d"
+  "CMakeFiles/projet_labyrinthe.dir/src/labyrinthe.cpp.o"
+  "CMakeFiles/projet_labyrinthe.dir/src/labyrinthe.cpp.o.d"
   "CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o"
   "CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o.d"
   "projet_labyrinthe"

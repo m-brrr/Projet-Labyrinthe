@@ -4,9 +4,11 @@
 #include <SFML/System.hpp>
 #include <memory>
 #include "terrain.hpp"
+#include "labyrinthe.hpp"
 #include "personnage.hpp"
 #include "enum_types.hpp"
 #include "gameFilter.hpp"
+#include <iostream>
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -31,7 +33,13 @@ class State {
 
 class GameState : public State {
 	private :
-		labyrinthe monlaby;
+		
+		const int H = 19; //dimensions du Labyrinthe
+    	const int L = 31;
+
+    	grilleLabyrinthe grilleLaby; //La grille du labyrinthe (constituée de 0 et de 1)
+		Map theMap;		//Le labyrinthe réel (généré à partir de la grille)
+
 		BarreDeVie maBarre;
 		personnage monPerso;
 		
@@ -41,7 +49,20 @@ class GameState : public State {
 	public :
 
 	//Constructeur :
-		GameState(StateMachine& machine, sf::RenderWindow& fenetre) : State(machine,fenetre), monPerso(personnage(1.f, Direction::Up, "Child", maBarre)) {}
+		GameState(StateMachine& machine, sf::RenderWindow& fenetre) : 
+			State(machine,fenetre), 
+			maBarre(),
+			monPerso(personnage(1.f, Direction::Up, "Child", maBarre)),
+			grilleLaby(H, L)
+				{
+				std::cout<<"generation du monde en cours..."<<std::endl;
+				grilleLaby.afficher();	//on l'affiche dans la console	
+
+				theMap.load( sf::Vector2u(300,300), grilleLaby.get_grille(),H,L);
+				std::cout<<"AAAAAA"<<std::endl;
+				grilleLaby.afficher();	//on l'affiche dans la console	
+				}
+
 	//Méthodes : 
 		void handleEvent() override;
 		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
