@@ -39,3 +39,9 @@ inline sf::Vector2f spellProduction(Direction maDirection) {
 	}
 	throw "this is an exception";
 }
+
+enum class EnemyState {
+	Patrol,
+	Chase,
+	Search
+};

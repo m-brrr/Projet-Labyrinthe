@@ -1,17 +1,13 @@
 #pragma once
-#include "enum_types.hpp"
-#include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
-#include "sorts.hpp"
-#include "personnage.hpp"
+#include <memory>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
 
-void verifierCollisions() {
-        for (auto& spell : spells) {
-            for (auto& personnage : personnages) {
-                if (spell.touchePersonnage(personnage.getGlobalBounds())) {
-                    // Gérer la collision (ex: infliger des dégâts)
-                }
-            }
-        }
-    }
+#include "enum_types.hpp"
+
+
+sf::Vector2f getRayImpact(sf::Vector2f playerPos, float angle, const std::vector<std::vector<int>>& maze, int tileWidth);

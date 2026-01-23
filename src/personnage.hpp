@@ -4,9 +4,10 @@
 #include <iostream>
 #include <string>
 #include <array>
+
 #include "enum_types.hpp"
+#include "fonctions_generales.hpp"
 #include "sorts.hpp"
-#define STRINGIFY(x) #x
 
 #include "gameFilter.hpp"
 
@@ -145,3 +146,100 @@ class personnage {
 			}
 		}
 };
+
+class monster : public personnage {
+	private :
+		sf::Vector2f enemyAbsPos;
+		EnemyState theState= EnemyState::Patrol;
+		float speed=200.f;
+	public :
+		bool canSeePlayer(sf::Vector2f playerAbsPos, const std::vector<std::vector<int>>& maze, int tileWidth ){
+			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
+			float angle=std::atan2(playerAbsPos.y-enemyAbsPos.y,playerAbsPos.x-enemyAbsPos.x);
+
+			sf::Vector2f impact=getRayImpact(enemyAbsPos, angle, maze, tileWidth);
+			float distanceToImpact=std::sqrt(std::pow(impact.x-enemyAbsPos.x,2)+std::pow(impact.y-enemyAbsPos.y,2));
+			return distanceToImpact>=distanceToPlayer;
+		}
+
+		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, int tileWidth, float dt ){
+			bool playerIsVisible = canSeePlayer(playerPos,maze, tileWidth );
+			switch (theState) {
+            case EnemyState::Patrol:
+                if (playerIsVisible) theState = EnemyState::Chase;
+                else updatePatrol(dt, tileWidth); 
+                break;
+
+            case EnemyState::Chase:
+                if (!playerIsVisible) theState = EnemyState::Search;
+                else updateChase(playerPos, dt);
+                break;
+			
+			/*
+            case EnemyState::Search:
+                if (playerIsVisible) theState = EnemyState::Chase;
+                else updateSearch(dt); // L'ennemi attend ou retourne en patrouille après X secondes
+                break;
+        	
+			*/
+			}
+		}
+
+		void updatePatrol(float dt, float tileWidth){
+			sf::Vector2i posInGrid = sf::Vector2i(static_cast<int>(enemyAbsPos.x/tileWidth), static_cast<int>(enemyAbsPos.y/tileWidth));
+			float distToSide=tileWidth/6;
+			if (enemyAbsPos.x-(posInGrid.x*tileWidth)>distToSide){
+				enemyAbsPos+=sf::Vector2f(-dt*speed,0.f);
+			}
+			else if (enemyAbsPos.y-(posInGrid.y*tileWidth)>distToSide){
+				enemyAbsPos+=sf::Vector2f(0.f, -dt*speed);
+			}
+			else {
+				moveInSquare(tileWidth-2*distToSide, dt);
+			}
+		}
+
+		void moveInSquare(float squareWidth, float dt) {
+			Direction maDirection = Direction::Right;
+		    // Déplacement en fonction de la direction actuelle
+		    switch (maDirection) {
+		        case Direction::Right: // Droite
+		            enemyAbsPos.x += speed*dt;
+		            if (enemyAbsPos.x >= squareWidth) {
+		                enemyAbsPos.x = squareWidth;
+		                maDirection = Direction::Down; // Passer à bas
+		            }
+		            break;
+		        case Direction::Down: // Bas
+		            enemyAbsPos.y += speed*dt;
+		            if (enemyAbsPos.y >= squareWidth) {
+		                enemyAbsPos.y = squareWidth;
+		                maDirection = Direction::Left; // Passer à gauche
+		            }
+		            break;
+		        case Direction::Left: // Gauche
+		            enemyAbsPos.x -= speed*dt;
+		            if (enemyAbsPos.x <= 0) {
+		                enemyAbsPos.x = 0;
+		                maDirection = Direction::Up; // Passer à haut
+		            }
+		            break;
+		        case Direction::Up: // Haut
+		            enemyAbsPos.y -= speed*dt;
+		            if (enemyAbsPos.y <= 0) {
+		                enemyAbsPos.y = 0;
+		                maDirection = Direction::Right; // Revenir à droite
+		            }
+		            break;
+		   		}
+			}
+
+		void updateChase(sf::Vector2f playerAbsPos, float dt){
+			sf::Vector2f direction=sf::Vector2f(playerAbsPos.x-enemyAbsPos.x, playerAbsPos.y-enemyAbsPos.y);
+			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
+			sf::Vector2f normalizedDirection= direction*distanceToPlayer;
+
+			enemyAbsPos+=speed*dt*normalizedDirection;
+		}
+};
+

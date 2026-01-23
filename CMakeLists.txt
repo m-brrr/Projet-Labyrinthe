@@ -13,7 +13,7 @@ set(SFML_DIR "/usr/lib/cmake/SFML")
 find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
 
 # Ajoute l'exécutable "projet_labyrinthe" en compilant le src/main.cpp
-add_executable(projet_labyrinthe src/main.cpp src/etats_jeu.cpp src/labyrinthe.cpp)
+add_executable(projet_labyrinthe src/main.cpp src/etats_jeu.cpp src/labyrinthe.cpp src/fonctions_generales.cpp)
 
 
 # Lie l'executable aux bibliothèques nécessaires
