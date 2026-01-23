@@ -12,7 +12,7 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 				if(event.type==sf::Event::KeyPressed)
 					{		
 					//pour les attaques
-						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) 
+						if (event.key.code == sf::Keyboard::Space) 
 						{	
 							if(monPerso.canAttack()){
 								Direction maDirection=monPerso.get_orientation();
@@ -34,7 +34,7 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 
 void GameState::update(float dt)  {
     				//Pour les déplacements : 
-					sf::Vector2f LabyMov;
+					sf::Vector2f LabyMov=sf::Vector2f(0.f,0.f);
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))	
 			            {
 							theMap.moveTheMap(dt, Direction::Left);
@@ -43,7 +43,7 @@ void GameState::update(float dt)  {
 							monPerso.setDirection(Direction::Left);
 							monPerso.perso_animateMov();
 						}
-				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			            {
 							theMap.moveTheMap(dt, Direction::Right);
 							LabyMov=theMap.getMov(dt, Direction::Right);
@@ -51,7 +51,7 @@ void GameState::update(float dt)  {
 							monPerso.setDirection(Direction::Right);
 							monPerso.perso_animateMov();
 						}
-				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			            {
 							theMap.moveTheMap(dt, Direction::Up);
 							LabyMov=theMap.getMov(dt, Direction::Up);
@@ -59,7 +59,7 @@ void GameState::update(float dt)  {
 							monPerso.setDirection(Direction::Up);
 							monPerso.perso_animateMov();
 						}
-				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			            {
 							theMap.moveTheMap(dt, Direction::Down);
 							LabyMov=theMap.getMov(dt, Direction::Down);
@@ -89,19 +89,34 @@ void GameState::update(float dt)  {
 						    }
 								
 						}
+						sf::Vector2f mapPos=theMap.getPosition();
+						sf::Vector2f playerPos= sf::Vector2f(400.f,300.f)-mapPos;
+						myView.update(grilleLaby.get_grille(),playerPos, 150);
+						myView.setPosition(mapPos);
+
 						
-							
 					}
 
+
 void GameState::render() {		//méthode pour tout afficher
+
+			lightmap.clear(sf::Color(10,10,20));//quasi noir
+			lightmap.draw(myView,sf::BlendAdd);
+			lightmap.display();
+
 			window.clear();
-			//window.draw(background);
 			window.draw(theMap);
+
 			monPerso.afficher_perso(window);
+			
+			lightSprite.setTexture(lightmap.getTexture());
+			window.draw(lightSprite, sf::BlendMultiply);
+
 			for (const auto& pspell : spells) {  // 'spellPtr' est un std::unique_ptr<Spell>
     					pspell->afficherSort(window);            // Utilise '->' pour appeler la méthode
 						}
+						
 			maBarre.afficherBarreDeVie(window);
-			//window.draw(monsters);
+
 			window.display();
 		}

@@ -38,7 +38,7 @@ class Map : public sf::Drawable, public sf::Transformable {
 				for (unsigned int j=0;j<height;j++) {
 					
 					//c'est le numéro de la tuile actuelle	(1 si c'est un mur et 0 sinon)
-					const int tileNumber = maze[i][j];
+					const int tileNumber = maze[j][i];
 
 					//c'est le pointeur vers les sommets des triangles de la tuile actuelle
 					sf::Vertex* triangles = &m_vertices[(i+j*width)*6];

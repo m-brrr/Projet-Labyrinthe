@@ -8,6 +8,7 @@
 #include "personnage.hpp"
 #include "enum_types.hpp"
 #include "gameFilter.hpp"
+#include "RayTracing.hpp"
 #include <iostream>
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
@@ -45,6 +46,11 @@ class GameState : public State {
 		
 		std::vector<std::unique_ptr<Spell>> spells;
 		std::vector<std::unique_ptr<personnage>> allEnemies;
+
+		sf::RenderTexture lightmap;
+		sf::Sprite lightSprite;
+		WhatUSee myView;
+	
 		
 	public :
 
@@ -53,14 +59,16 @@ class GameState : public State {
 			State(machine,fenetre), 
 			maBarre(),
 			monPerso(personnage(1.f, Direction::Up, "Child", maBarre)),
-			grilleLaby(H, L)
+			grilleLaby(H, L),
+			myView()
 				{
 				std::cout<<"generation du monde en cours..."<<std::endl;
 				grilleLaby.afficher();	//on l'affiche dans la console	
 
-				theMap.load( sf::Vector2u(300,300), grilleLaby.get_grille(),H,L);
+				theMap.load( sf::Vector2u(150,150), grilleLaby.get_grille(),L,H);
 				std::cout<<"AAAAAA"<<std::endl;
 				grilleLaby.afficher();	//on l'affiche dans la console	
+				lightmap.create(800,600);
 				}
 
 	//Méthodes : 
