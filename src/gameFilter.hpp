@@ -8,7 +8,7 @@
 
 
 class BarreDeVie {
-	private :
+	protected :
 		int healthPoints;
 		sf::Texture textureSheet;
 		sf::Sprite spriteBarre;
@@ -29,21 +29,6 @@ class BarreDeVie {
 			//La taille du spellSprite est de 106x10
 				const int spriteWidth=106;
 				const int spriteHeight=10;
-
-				spriteBarre.setPosition(200.f,550.f);
-				spriteBarre.setScale(4.f, 1.5);
-
-				float recWidth=spriteBarre.getGlobalBounds().width-40.f;
-				float recHeight=spriteBarre.getGlobalBounds().height-10.f;
-
-				sf::RectangleShape rectangle(sf::Vector2f(recWidth, recHeight));
-
-				square=rectangle;
-
-				square.setPosition(220.f,555.f);
-
-
-				square.setFillColor(sf::Color::Green);
 				
 		}
 
@@ -52,8 +37,47 @@ class BarreDeVie {
 			window.draw(square);
 		}
 
-		void takeDamage(float percentage){	//vie restante en pourcentage de ta vie maximale
+		void setPercentage(float percentage){	//vie restante en pourcentage de ta vie maximale
 			square.setScale(percentage, 1);
 		}
+};
 
+class PlayerBarreDeVie : public BarreDeVie {
+	public :
+		PlayerBarreDeVie() : BarreDeVie() {
+			spriteBarre.setPosition(200.f,550.f);
+			spriteBarre.setScale(4.f, 1.5);
+			
+			float recWidth=spriteBarre.getGlobalBounds().width-40.f;
+			float recHeight=spriteBarre.getGlobalBounds().height-10.f;
+
+			sf::RectangleShape rectangle(sf::Vector2f(recWidth, recHeight));
+
+			square=rectangle;
+
+			square.setPosition(220.f,555.f);
+			square.setFillColor(sf::Color::Green);
+		}
+};
+
+class EnemyBarreDeVie : public BarreDeVie {
+
+	private :
+		sf::Vector2f enemyRelPosition;
+
+	public :
+		EnemyBarreDeVie(sf::Vector2f Position) : BarreDeVie(), enemyRelPosition(Position) {
+				spriteBarre.setPosition(Position);
+				spriteBarre.setScale(1.f, 1.f);	//à régler
+
+				float recWidth=spriteBarre.getGlobalBounds().width-10.f;	//à régler
+				float recHeight=spriteBarre.getGlobalBounds().height-4.f;	//à régler
+
+				sf::RectangleShape rectangle(sf::Vector2f(recWidth, recHeight));
+
+				square=rectangle;
+
+				square.setPosition(enemyRelPosition+sf::Vector2f(5.f,3.f));
+				square.setFillColor(sf::Color::Green);
+		}
 };

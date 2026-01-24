@@ -14,17 +14,17 @@
 
 
 class personnage {
-	private :
+	protected :
 		
 		sf::Texture spriteSheet;
 		sf::Sprite character;	
 		std::string character_type;	//Le caractère voulu (à complêter avec la page de menu)
+
 		std::array<std::array<sf::IntRect, 8>, 4> postures;
 		int postureAct=0;	//de 0(repos) à 8
 		Direction maDirection= Direction::Up;	 //0 face, 1 dos, 2 gauche, 3 droit
 		
 		std::string typeDeSpell="BlueFireBall";
-		float taille;
 		float HealthMax=1000;
 		float HealthPoint = 1000;
 		int Level=1;
@@ -34,14 +34,13 @@ class personnage {
 		float animationDelay =0.1f;
 		float attackDelay=0.3f;
 
-		BarreDeVie maBarreDeVie;
-		int damageDisplay=0;
+		int damageDisplay=0;	//sert à l'effet de rouge lorsque le perso prend un dégat
 
 
 	
 	public :
 		//constucteur du personnage
-		personnage(float t,Direction o, std::string perso_choisi, BarreDeVie barreVie) : taille(t), maDirection(o), maBarreDeVie(barreVie)
+		personnage(Direction o, std::string perso_choisi) :  maDirection(o)
 		{
 			//On récupère la spriteSheet
 				character_type=perso_choisi;
@@ -68,15 +67,10 @@ class personnage {
 			//On positionne le centre du personnage sur le centre de l'écran
 				character.setTextureRect(postures[0][0]);
 				character.setOrigin(character.getLocalBounds().width / 2.f, character.getLocalBounds().height / 2.f);
-				character.setPosition(400.f, 300.f);
-				
 
 		}
 
 		//renvoyer les infos du personnage
-		float get_taille() const {
-			return taille;
-		}
 
 		sf::FloatRect getBoundsCharacter() const {
         	return character.getGlobalBounds();
@@ -116,7 +110,7 @@ class personnage {
 			}
 		}
 
-		void afficher_perso(sf::RenderWindow &window) {
+		virtual void afficher_perso(sf::RenderWindow &window) {
 			int i=convertToNumberCharacter(maDirection);
 			character.setTextureRect(postures[i][postureAct]);
 
@@ -131,40 +125,78 @@ class personnage {
 			character.setColor(sf::Color::White); // Réinitialise la couleur pour enlever les filtres
 
 		}
-		
-		void take_damage(int spellLevel){
+
+		virtual void take_damage(int spellLevel){
 			damageDisplay=3;			//Le visuel des dégats -> devient rouge
 			HealthPoint-=(100*spellLevel);		//La perte de points de vie
+		}
+};
+
+
+
+
+class playerPerso : public personnage {
+	private :
+		PlayerBarreDeVie maBarreDeVie;
+
+	public :
+
+		playerPerso(Direction o, std::string perso_choisi, PlayerBarreDeVie barreVie) : personnage(o,perso_choisi), maBarreDeVie(barreVie) {
+			character.setPosition(400.f,300.f);
+		}
+
+		void take_damage(int spellLevel) override {
+
+			personnage::take_damage(spellLevel);
 
 			if (HealthPoint>0) {
 				float percentage = HealthPoint/HealthMax;
 				std::cout<<percentage<<std::endl;
-				maBarreDeVie.takeDamage(percentage);
+				maBarreDeVie.setPercentage(percentage);
 			}
 			else {
+				maBarreDeVie.setPercentage(0.f);
 				std::cout<<"C'est Perdu !"<<std::endl;
 			}
 		}
+
+			void afficher_perso(sf::RenderWindow &window) {
+			int i=convertToNumberCharacter(maDirection);
+			character.setTextureRect(postures[i][postureAct]);
+
+			//On vérifie qu'il ne soit pas en train de prendre des dégats
+			if (damageDisplay>0) {
+				sf::Color rouge(255, 100, 100, 255); // Rouge clair (R, G, B, Alpha)
+				character.setColor(rouge);
+				damageDisplay-=1;
+			}
+
+			window.draw(character);
+			character.setColor(sf::Color::White); // Réinitialise la couleur pour enlever les filtres
+
+		}
 };
+
 
 class monster : public personnage {
 	private :
 		sf::Vector2f enemyAbsPos;
-		EnemyState theState= EnemyState::Patrol;
-		float speed=200.f;
+		EnemyState theState;
+		EnemyBarreDeVie barreVie;
+		int transitionState=1; //1 pour en transition, 0 sinon
+		float speed=100.f;
 	public :
-		bool canSeePlayer(sf::Vector2f playerAbsPos, const std::vector<std::vector<int>>& maze, int tileWidth ){
-			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
-			float angle=std::atan2(playerAbsPos.y-enemyAbsPos.y,playerAbsPos.x-enemyAbsPos.x);
 
-			sf::Vector2f impact=getRayImpact(enemyAbsPos, angle, maze, tileWidth);
-			float distanceToImpact=std::sqrt(std::pow(impact.x-enemyAbsPos.x,2)+std::pow(impact.y-enemyAbsPos.y,2));
-			return distanceToImpact>=distanceToPlayer;
+		monster(Direction o, std::string perso_choisi, sf::Vector2f enemyPosition) : personnage(o,perso_choisi), enemyAbsPos(enemyPosition), barreVie(enemyPosition) {
+			character.setPosition(enemyAbsPos);
+			theState=EnemyState::Patrol;
 		}
 
-		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, int tileWidth, float dt ){
+		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt ){
 			bool playerIsVisible = canSeePlayer(playerPos,maze, tileWidth );
-			switch (theState) {
+			updatePatrol(dt, tileWidth, playerPos);
+			
+			/*switch (theState) {
             case EnemyState::Patrol:
                 if (playerIsVisible) theState = EnemyState::Chase;
                 else updatePatrol(dt, tileWidth); 
@@ -175,59 +207,64 @@ class monster : public personnage {
                 else updateChase(playerPos, dt);
                 break;
 			
-			/*
+			
             case EnemyState::Search:
                 if (playerIsVisible) theState = EnemyState::Chase;
                 else updateSearch(dt); // L'ennemi attend ou retourne en patrouille après X secondes
                 break;
+			}
         	
 			*/
-			}
+			character.setPosition(enemyAbsPos-playerPos+sf::Vector2f(400.f, 300.f));
+			perso_animateMov();
 		}
 
-		void updatePatrol(float dt, float tileWidth){
-			sf::Vector2i posInGrid = sf::Vector2i(static_cast<int>(enemyAbsPos.x/tileWidth), static_cast<int>(enemyAbsPos.y/tileWidth));
+		void updatePatrol(float dt, float tileWidth, sf::Vector2f playerPos){
+			sf::Vector2f posInGrid = sf::Vector2f(static_cast<int>(enemyAbsPos.x/tileWidth), static_cast<int>(enemyAbsPos.y/tileWidth));
 			float distToSide=tileWidth/6;
-			if (enemyAbsPos.x-(posInGrid.x*tileWidth)>distToSide){
+			if ((enemyAbsPos.x-(posInGrid.x*tileWidth)>distToSide) && transitionState==1){
+				setDirection(Direction::Left);
 				enemyAbsPos+=sf::Vector2f(-dt*speed,0.f);
 			}
-			else if (enemyAbsPos.y-(posInGrid.y*tileWidth)>distToSide){
+			else if ((enemyAbsPos.y-(posInGrid.y*tileWidth))>distToSide && transitionState==1){
+				setDirection(Direction::Up);
 				enemyAbsPos+=sf::Vector2f(0.f, -dt*speed);
 			}
 			else {
-				moveInSquare(tileWidth-2*distToSide, dt);
+				transitionState=0;
+				moveInSquare(tileWidth-2*distToSide, dt, posInGrid*tileWidth);
 			}
 		}
 
-		void moveInSquare(float squareWidth, float dt) {
-			Direction maDirection = Direction::Right;
+		void moveInSquare(float squareWidth, float dt, sf::Vector2f posInit) {
+			
 		    // Déplacement en fonction de la direction actuelle
 		    switch (maDirection) {
 		        case Direction::Right: // Droite
 		            enemyAbsPos.x += speed*dt;
-		            if (enemyAbsPos.x >= squareWidth) {
-		                enemyAbsPos.x = squareWidth;
+		            if (enemyAbsPos.x >= squareWidth+posInit.x) {
+		                enemyAbsPos.x = squareWidth+posInit.x;
 		                maDirection = Direction::Down; // Passer à bas
 		            }
 		            break;
 		        case Direction::Down: // Bas
 		            enemyAbsPos.y += speed*dt;
-		            if (enemyAbsPos.y >= squareWidth) {
-		                enemyAbsPos.y = squareWidth;
+		            if (enemyAbsPos.y >= squareWidth+posInit.y) {
+		                enemyAbsPos.y = squareWidth+posInit.y;
 		                maDirection = Direction::Left; // Passer à gauche
 		            }
 		            break;
 		        case Direction::Left: // Gauche
 		            enemyAbsPos.x -= speed*dt;
-		            if (enemyAbsPos.x <= 0) {
-		                enemyAbsPos.x = 0;
+		            if (enemyAbsPos.x <= posInit.x) {
+		                enemyAbsPos.x = posInit.x;
 		                maDirection = Direction::Up; // Passer à haut
 		            }
 		            break;
 		        case Direction::Up: // Haut
 		            enemyAbsPos.y -= speed*dt;
-		            if (enemyAbsPos.y <= 0) {
-		                enemyAbsPos.y = 0;
+		            if (enemyAbsPos.y <= posInit.y) {
+		                enemyAbsPos.y = posInit.y;
 		                maDirection = Direction::Right; // Revenir à droite
 		            }
 		            break;
@@ -241,5 +278,18 @@ class monster : public personnage {
 
 			enemyAbsPos+=speed*dt*normalizedDirection;
 		}
-};
+
+		bool canSeePlayer(sf::Vector2f playerAbsPos, const std::vector<std::vector<int>>& maze, int tileWidth ){
+			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
+			float angle=std::atan2(playerAbsPos.y-enemyAbsPos.y,playerAbsPos.x-enemyAbsPos.x);
+
+			sf::Vector2f impact=getRayImpact(enemyAbsPos, angle, maze, tileWidth);
+			float distanceToImpact=std::sqrt(std::pow(impact.x-enemyAbsPos.x,2)+std::pow(impact.y-enemyAbsPos.y,2));
+			return distanceToImpact>=distanceToPlayer;
+		}
+
+		void setScreenPosition(sf::Vector2f LabyMov){
+			character.setPosition(enemyAbsPos+ LabyMov);
+		}
+	};
 

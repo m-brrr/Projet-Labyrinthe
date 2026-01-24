@@ -75,8 +75,12 @@ void GameState::update(float dt)  {
 			                    pcharacter->take_damage(pspell->getSpellLevel());
 			                }
 			            }*/
+					 
+					//Mise à jour de la position du perso dans la map (absolue)
+						sf::Vector2f mapPos=theMap.getPosition();
+						sf::Vector2f playerPos= sf::Vector2f(400.f,300.f)-mapPos;
 						
-						
+					//Mise à jour des sorts
 						for (auto it = spells.begin(); it != spells.end(); ) {
 							(*it)->setPosition(dt, LabyMov);
 							(*it)->Spell_animateMov();
@@ -87,14 +91,17 @@ void GameState::update(float dt)  {
 						    } else {
 						        ++it; // Passe au sort suivant
 						    }
-								
 						}
-						sf::Vector2f mapPos=theMap.getPosition();
-						sf::Vector2f playerPos= sf::Vector2f(400.f,300.f)-mapPos;
-						myView.update(grilleLaby.get_grille(),playerPos, 150);
-						myView.setPosition(mapPos);
 
+						//Mise à jour des enemis
+						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
+							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt);
+							++it; // Passe au monstre suivant
+						}
 						
+						//mettre à jour la vue (ie le rayCasting)
+						myView.update(grilleLaby.get_grille(),playerPos, 150);
+						myView.setPosition(mapPos);	
 					}
 
 
@@ -115,6 +122,9 @@ void GameState::render() {		//méthode pour tout afficher
 			for (const auto& pspell : spells) {  // 'spellPtr' est un std::unique_ptr<Spell>
     					pspell->afficherSort(window);            // Utilise '->' pour appeler la méthode
 						}
+			for (const auto& pmonster : allEnemies){
+				pmonster->afficher_perso(window);
+			}
 						
 			maBarre.afficherBarreDeVie(window);
 

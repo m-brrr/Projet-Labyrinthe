@@ -41,11 +41,11 @@ class GameState : public State {
     	grilleLabyrinthe grilleLaby; //La grille du labyrinthe (constituée de 0 et de 1)
 		Map theMap;		//Le labyrinthe réel (généré à partir de la grille)
 
-		BarreDeVie maBarre;
-		personnage monPerso;
+		PlayerBarreDeVie maBarre;
+		playerPerso monPerso;
 		
 		std::vector<std::unique_ptr<Spell>> spells;
-		std::vector<std::unique_ptr<personnage>> allEnemies;
+		std::vector<std::unique_ptr<monster>> allEnemies;
 
 		sf::RenderTexture lightmap;
 		sf::Sprite lightSprite;
@@ -58,7 +58,7 @@ class GameState : public State {
 		GameState(StateMachine& machine, sf::RenderWindow& fenetre) : 
 			State(machine,fenetre), 
 			maBarre(),
-			monPerso(personnage(1.f, Direction::Up, "Child", maBarre)),
+			monPerso(playerPerso(Direction::Up, "Child", maBarre)),
 			grilleLaby(H, L),
 			myView()
 				{
@@ -69,6 +69,7 @@ class GameState : public State {
 				std::cout<<"AAAAAA"<<std::endl;
 				grilleLaby.afficher();	//on l'affiche dans la console	
 				lightmap.create(800,600);
+				allEnemies.push_back(std::make_unique<monster>(Direction::Up, "Aguy", sf::Vector2f(200.f,200.f)));
 				}
 
 	//Méthodes : 
