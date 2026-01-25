@@ -45,3 +45,7 @@ enum class EnemyState {
 	Chase,
 	Search
 };
+
+enum class StatesNames {
+	Menu, Game, GameOver, Pause
+};

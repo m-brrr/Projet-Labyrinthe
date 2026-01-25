@@ -1,5 +1,6 @@
 #include "etats_jeu.hpp"
 
+		//Page de Jeu
 
 void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (à chaque Frame, c'est juste un parcourt rapide du buffer des évenemengts)
 			 sf::Event event;
@@ -80,29 +81,55 @@ void GameState::update(float dt)  {
 						sf::Vector2f mapPos=theMap.getPosition();
 						sf::Vector2f playerPos= sf::Vector2f(400.f,300.f)-mapPos;
 						
+					//Mise à jour des enemis
+						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
+							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt);
+							
+							++it; // Passe au monstre suivant
+						}
+
 					//Mise à jour des sorts
 						for (auto it = spells.begin(); it != spells.end(); ) {
+
 							(*it)->setPosition(dt, LabyMov);
 							(*it)->Spell_animateMov();
+							bool spellDestroyed = false;
+
 						    if ((*it)->didTouchCharacter(monPerso.getBoundsCharacter())) {
 						        std::cout << "YESSS" << std::endl;
 						        monPerso.take_damage((*it)->getSpellLevel());
-						        //it = spells.erase(it); // Supprime l'élément et met à jour l'itérateur
-						    } else {
-						        ++it; // Passe au sort suivant
-						    }
-						}
+						        spellDestroyed = true; // Supprime l'élément et met à jour l'itérateur
+						    } 
 
-						//Mise à jour des enemis
-						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
-							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt);
-							++it; // Passe au monstre suivant
+							if (!spellDestroyed) {
+						        for (auto& enemy : allEnemies) {
+						            if ((*it)->didTouchCharacter(enemy->getBoundsCharacter())) {
+						                std::cout << "Ennemi touché !" << std::endl;
+						                enemy->take_damage((*it)->getSpellLevel());
+						                spellDestroyed = true;
+						                break; // Le sort est consommé par le premier ennemi touché
+						            }
+						        }
+							}
+
+							if (spellDestroyed) {
+								it = spells.erase(it);
+							}
+							else {it++;}
 						}
 						
+						for (auto enemyIt = allEnemies.begin(); enemyIt != allEnemies.end(); ) {
+						    if (!(*enemyIt)->isAlive()) {
+						        std::cout << "Un ennemi vient de mourir !" << std::endl;
+						        enemyIt = allEnemies.erase(enemyIt);
+						    } else {
+						        ++enemyIt;
+						    }
+						}
 						//mettre à jour la vue (ie le rayCasting)
 						myView.update(grilleLaby.get_grille(),playerPos, 150);
 						myView.setPosition(mapPos);	
-					}
+}
 
 
 void GameState::render() {		//méthode pour tout afficher
@@ -115,6 +142,9 @@ void GameState::render() {		//méthode pour tout afficher
 			window.draw(theMap);
 
 			monPerso.afficher_perso(window);
+			for (const auto& pmonster : allEnemies){
+				pmonster->afficher_perso(window);
+			}
 			
 			lightSprite.setTexture(lightmap.getTexture());
 			window.draw(lightSprite, sf::BlendMultiply);
@@ -122,11 +152,42 @@ void GameState::render() {		//méthode pour tout afficher
 			for (const auto& pspell : spells) {  // 'spellPtr' est un std::unique_ptr<Spell>
     					pspell->afficherSort(window);            // Utilise '->' pour appeler la méthode
 						}
-			for (const auto& pmonster : allEnemies){
-				pmonster->afficher_perso(window);
-			}
 						
 			maBarre.afficherBarreDeVie(window);
 
 			window.display();
 		}
+
+
+		//Page de Fin de Jeu
+		
+
+void EndState::handleEvent() {
+	sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) window.close();
+
+        // Interaction avec les boutons
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (titreFin.RetryIsPressed(mousePos)) {
+				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window)));
+                machine.changeStateRequest(StatesNames::Game);
+            }
+            if (titreFin.MenuIsPressed(mousePos)) {
+                // machine.changeState(new MenuState(machine, fenetre));
+            }
+        }
+    }
+}	
+
+void EndState::update(float dt) {
+	sf::Vector2i posSouris = sf::Mouse::getPosition(window);
+    titreFin.update(dt, posSouris);
+}
+
+void EndState::render() {
+	window.clear();
+	titreFin.afficherTitre(window);
+	window.display();
+}

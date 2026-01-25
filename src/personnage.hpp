@@ -88,6 +88,9 @@ class personnage {
 			return Level;
 		}
 
+		bool isAlive () {
+			return HealthPoint>0;
+		}
 		//Méthodes utiles (non const)
 
 		bool canAttack()
@@ -159,22 +162,6 @@ class playerPerso : public personnage {
 				std::cout<<"C'est Perdu !"<<std::endl;
 			}
 		}
-
-			void afficher_perso(sf::RenderWindow &window) {
-			int i=convertToNumberCharacter(maDirection);
-			character.setTextureRect(postures[i][postureAct]);
-
-			//On vérifie qu'il ne soit pas en train de prendre des dégats
-			if (damageDisplay>0) {
-				sf::Color rouge(255, 100, 100, 255); // Rouge clair (R, G, B, Alpha)
-				character.setColor(rouge);
-				damageDisplay-=1;
-			}
-
-			window.draw(character);
-			character.setColor(sf::Color::White); // Réinitialise la couleur pour enlever les filtres
-
-		}
 };
 
 
@@ -194,14 +181,19 @@ class monster : public personnage {
 
 		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt ){
 			bool playerIsVisible = canSeePlayer(playerPos,maze, tileWidth );
-			updatePatrol(dt, tileWidth, playerPos);
 			
-			/*switch (theState) {
+			
+			switch (theState) {
             case EnemyState::Patrol:
                 if (playerIsVisible) theState = EnemyState::Chase;
-                else updatePatrol(dt, tileWidth); 
+                else updatePatrol(dt, tileWidth, playerPos); 
                 break;
+			case EnemyState::Chase:
+				if (playerIsVisible) updateChase(playerPos, dt);
+				else theState=EnemyState::Patrol;
+			}
 
+			/*
             case EnemyState::Chase:
                 if (!playerIsVisible) theState = EnemyState::Search;
                 else updateChase(playerPos, dt);
@@ -276,7 +268,20 @@ class monster : public personnage {
 			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
 			sf::Vector2f normalizedDirection= direction*distanceToPlayer;
 
-			enemyAbsPos+=speed*dt*normalizedDirection;
+			if (std::abs(normalizedDirection.x)>=std::abs(normalizedDirection.y)) {
+				if (normalizedDirection.x>=0) {	enemyAbsPos.x+=speed*dt;
+												maDirection=Direction::Right; }
+						
+						
+				else {	enemyAbsPos.x-=speed*dt;
+						maDirection=Direction::Left;}
+			}
+			else {
+				if (normalizedDirection.y>=0) {	enemyAbsPos.y+=speed*dt;
+												maDirection=Direction::Down;}
+				else {	enemyAbsPos.y-=speed*dt;
+						maDirection=Direction::Up;}
+			}
 		}
 
 		bool canSeePlayer(sf::Vector2f playerAbsPos, const std::vector<std::vector<int>>& maze, int tileWidth ){

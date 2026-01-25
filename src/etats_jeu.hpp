@@ -9,7 +9,10 @@
 #include "enum_types.hpp"
 #include "gameFilter.hpp"
 #include "RayTracing.hpp"
+#include "game_over.hpp"
+#include "boutons.hpp"
 #include <iostream>
+#include <stack>
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -78,6 +81,24 @@ class GameState : public State {
 		void render() override;
 };
 
+
+
+class EndState : public State{
+	private :
+		affichage_fin titreFin;
+		
+	public :
+		EndState(StateMachine& machine, sf::RenderWindow& fenetre):  State(machine, fenetre),titreFin()
+			{
+			std::cout<<"generation page de fin de jeu en cours..."<<std::endl;
+			}
+
+		void handleEvent() override;
+		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
+		void render() override;
+};
+
+
 /*
 class MenuState : public State {
 	public : 
@@ -90,10 +111,6 @@ class MenuState : public State {
 		//méthodes 
 
 		void()
-};
-
-class SettingsState : public State{
-	public :
 };
 
 class BreakState : public State {
@@ -113,42 +130,68 @@ void affichage_menu(sf::RenderWindow window) {
 	Nom_Jeu.setCharacterSize(32);
 	window.draw(Nom_Jeu);
 }
+	*/
 
-class bouton {
-	private :
-		int x;
-		int y;
-		std::unique_ptr<sf::Shape> forme;
-		std::unique_ptr<sf::Color> couleur;
-		sf::Text text;	//potentiellement vide
-	public :
-		bouton(int posX,int posY, std::unique_ptr<sf::Shape> shape, std::unique_ptr<sf::Color> color) : x(posX), y(posY), forme(std::move(shape)), couleur(std::move(color)){}
+class StateMachine {
+private:
+    // Utiliser une map permet d'accéder à l'état par son ID sans utiliser de chiffres (un peu comme un dictionnaire python)
+    std::map<StatesNames, std::unique_ptr<State>> states;
+    StatesNames currentState;
+	StatesNames newState;
+    bool hasCurrentState = false;
+	bool changeStateFlag = false;
 
-		int getX(){
-			return x;
-		}
-		int getY(){
-			return y;
-		}
-		sf::Shape& getShape() {
-        	return *forme;
-    	}
-		void text(std::string string){
 
-		}
-}
+public:
+    // Ajoute ou remplace un état (move détruit automatiquement un état)
+    void addState(StatesNames id, std::unique_ptr<State> newState) {
+        states[id] = std::move(newState); 
+    }
 
-*/
+    // Change l'état actif avec vérification de sécurité
+    void setCurrentState(StatesNames id) {
+            currentState = id;
+            hasCurrentState = true;
+    }
 
-class StateMachine {	//gestionnaire des différents états
-	private:
-		std::unique_ptr<State> current;
-	public : 
-	void setState(std::unique_ptr<State> newState){
-		current = std::move(newState);
+    // Accesseur rapide pour l'état actuel
+    State* getCurrent() {
+        return hasCurrentState ? states[currentState].get() : nullptr;
+    }
+    
+    void handleEvent() {
+        if (auto* state = getCurrent()) {
+            state->handleEvent();
+        }
+    }
+
+    void update(float dt) {
+        if (auto* state = getCurrent()) {
+            state->update(dt);
+        }
+    }
+
+    void render() {
+        if (auto* state = getCurrent()) {
+            state->render();
+        }
+    }
+
+    // Supprimer un état pour libérer de la mémoire
+    void removeState(StatesNames id) {
+        states.erase(id);
+        if (currentState == id) hasCurrentState = false;
+    }
+
+	void changeStateRequest(StatesNames id){
+		newState= id;
+		changeStateFlag=true;
 	}
-	void handleEvent() {current->handleEvent(); }
-	void update(float dt) {current->update(dt);}
-	void render() {current->render();}
 
+	void changeStateApply(){
+		if (changeStateFlag){
+			setCurrentState(newState);
+			changeStateFlag=false;
+		}
+	}
 };

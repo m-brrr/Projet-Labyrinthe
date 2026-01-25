@@ -4,12 +4,14 @@
 #include "etats_jeu.hpp"
 #include "terrain.hpp"
 #include "personnage.hpp"
+#include "enum_types.hpp"
 
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(800,600), "Labyrinthe");
     StateMachine machine;
-    machine.setState(std::make_unique<GameState>(machine, window));
+    machine.addState(StatesNames::GameOver, std::make_unique<EndState>(machine, window));
+	machine.setCurrentState(StatesNames::GameOver);
 
 	sf::Clock gameClock;
 
@@ -17,6 +19,11 @@ int main() {
 		float dt = gameClock.restart().asSeconds(); //à chaque frame
         machine.handleEvent();
         machine.update(dt);
+
+		window.clear();
         machine.render();
+		window.display();
+
+		machine.changeStateApply();
     }
 }
