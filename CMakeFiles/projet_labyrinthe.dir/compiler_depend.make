@@ -10,6 +10,7 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   src/gameFilter.hpp \
   src/game_over.hpp \
   src/labyrinthe.hpp \
+  src/page_menu.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
   src/terrain.hpp \
@@ -1052,6 +1053,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   src/gameFilter.hpp \
   src/game_over.hpp \
   src/labyrinthe.hpp \
+  src/page_menu.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
   src/terrain.hpp \
@@ -1548,9 +1550,9 @@ src/labyrinthe.cpp:
 
 /usr/include/errno.h:
 
-/usr/include/x86_64-linux-gnu/bits/timesize.h:
+/usr/include/stdint.h:
 
-/usr/include/c++/13/bits/locale_classes.h:
+/usr/include/endian.h:
 
 /usr/include/c++/13/bits/invoke.h:
 
@@ -1644,16 +1646,6 @@ src/labyrinthe.cpp:
 
 /usr/include/c++/13/bits/stl_relops.h:
 
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/include/c++/13/bits/algorithmfwd.h:
-
-/usr/include/SFML/Window/Keyboard.hpp:
-
-/usr/include/c++/13/bits/ios_base.h:
-
-/usr/include/c++/13/iterator:
-
 /usr/include/c++/13/bits/stl_vector.h:
 
 /usr/include/c++/13/bits/ostream_insert.h:
@@ -1694,13 +1686,19 @@ src/labyrinthe.cpp:
 
 /usr/include/SFML/System/ThreadLocal.hpp:
 
-/usr/include/libintl.h:
-
-/usr/include/SFML/System/String.hpp:
-
 /usr/include/SFML/Graphics/Rect.inl:
 
 /usr/include/c++/13/cmath:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/include/c++/13/bits/algorithmfwd.h:
+
+/usr/include/SFML/Window/Keyboard.hpp:
+
+/usr/include/c++/13/bits/ios_base.h:
+
+/usr/include/c++/13/iterator:
 
 /usr/include/c++/13/bits/allocator.h:
 
@@ -1709,10 +1707,6 @@ src/labyrinthe.cpp:
 /usr/include/SFML/Window/WindowHandle.hpp:
 
 src/enum_types.hpp:
-
-/usr/include/stdint.h:
-
-/usr/include/endian.h:
 
 /usr/include/SFML/Graphics/CircleShape.hpp:
 
@@ -1732,21 +1726,29 @@ src/game_over.hpp:
 
 /usr/include/SFML/Graphics/PrimitiveType.hpp:
 
-/usr/include/SFML/Window/Vulkan.hpp:
+/usr/include/SFML/Graphics/Export.hpp:
 
-/usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
+/usr/include/SFML/Graphics/Sprite.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+/usr/include/c++/13/ext/aligned_buffer.h:
 
-/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
+/usr/include/c++/13/backward/binders.h:
 
-/usr/include/SFML/Graphics/RectangleShape.hpp:
+/usr/include/SFML/System/Export.hpp:
 
-/usr/include/c++/13/tr1/poly_hermite.tcc:
+/usr/include/SFML/System/Thread.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 
-/usr/include/SFML/Graphics/Glyph.hpp:
+/usr/include/math.h:
+
+/usr/include/SFML/Graphics/Transform.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
+
+/usr/include/c++/13/limits:
+
+/usr/include/c++/13/bits/deque.tcc:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
 
@@ -1782,6 +1784,14 @@ src/gameFilter.hpp:
 
 /usr/include/c++/13/memory:
 
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/SFML/Graphics/Glyph.hpp:
+
+src/RayTracing.hpp:
+
+/usr/include/SFML/Graphics/Shader.hpp:
+
 /usr/include/SFML/Graphics/Transformable.hpp:
 
 /usr/include/SFML/Graphics/View.hpp:
@@ -1789,34 +1799,6 @@ src/gameFilter.hpp:
 src/terrain.hpp:
 
 /usr/include/SFML/System/Utf.hpp:
-
-/usr/include/SFML/Graphics/Export.hpp:
-
-/usr/include/SFML/Graphics/Sprite.hpp:
-
-/usr/include/c++/13/ext/aligned_buffer.h:
-
-/usr/include/c++/13/backward/binders.h:
-
-/usr/include/SFML/Graphics/Shader.hpp:
-
-src/RayTracing.hpp:
-
-/usr/include/SFML/System/Export.hpp:
-
-/usr/include/SFML/System/Thread.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
-
-/usr/include/math.h:
-
-/usr/include/SFML/Graphics/Transform.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
-
-/usr/include/c++/13/limits:
-
-/usr/include/c++/13/bits/deque.tcc:
 
 /usr/include/SFML/Graphics/Rect.hpp:
 
@@ -1855,6 +1837,22 @@ src/sorts.hpp:
 /usr/include/c++/13/bits/cxxabi_forced.h:
 
 /usr/include/c++/13/istream:
+
+/usr/include/SFML/Window/Vulkan.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
+
+/usr/include/SFML/Graphics/RectangleShape.hpp:
+
+/usr/include/c++/13/tr1/poly_hermite.tcc:
+
+/usr/include/libintl.h:
+
+/usr/include/SFML/System/String.hpp:
 
 /usr/include/SFML/System/MemoryInputStream.hpp:
 
@@ -1917,6 +1915,10 @@ src/personnage.hpp:
 /usr/include/c++/13/bits/stl_iterator_base_funcs.h:
 
 /usr/include/SFML/System/Lock.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/timesize.h:
+
+/usr/include/c++/13/bits/locale_classes.h:
 
 /usr/include/c++/13/bits/istream.tcc:
 
@@ -2093,6 +2095,8 @@ src/fonctions_generales.cpp:
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
 /usr/include/c++/13/bits/stl_iterator.h:
+
+src/page_menu.hpp:
 
 /usr/include/c++/13/ext/numeric_traits.h:
 

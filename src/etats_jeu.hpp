@@ -10,7 +10,8 @@
 #include "gameFilter.hpp"
 #include "RayTracing.hpp"
 #include "game_over.hpp"
-#include "boutons.hpp"
+#include "page_menu.hpp"
+#include "sorts.hpp"
 #include <iostream>
 #include <stack>
 
@@ -99,20 +100,24 @@ class EndState : public State{
 };
 
 
-/*
+
 class MenuState : public State {
+	private :
+		affichage_menu menu;
 	public : 
 		//constructeur
-		MenuState(StateMachine& machine, sf::RenderWindow& fenetre) : State(machine, fenetre){}
-
-		//destructeur
-		~MenuState() override {};
-
+		MenuState(StateMachine& machine, sf::RenderWindow& fenetre) : State(machine, fenetre)
+		{
+			std::cout<<"generation page menu du jeu en cours..."<<std::endl;
+		}
 		//méthodes 
 
-		void()
+		void handleEvent() override;
+		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
+		void render() override;
 };
 
+/*
 class BreakState : public State {
 	public :
 };

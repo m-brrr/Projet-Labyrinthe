@@ -5,7 +5,7 @@
 #include "boutons.hpp"
 
 
-class affichage_fin {
+class affichage_menu {
 	private :
 		sf::Text Nom_Jeu;
 		sf::Text subNom_Jeu;
@@ -14,13 +14,15 @@ class affichage_fin {
 		sf::Texture backGroundTexture;
 		sf::Sprite backGroundSprite;
 
-		Button btnRetry;
-		Button btnMenu;
+		Button btnPlay;
+		Button btnCharacter;
+		Button btnSettings;
 
 		float flicker=0;
 	public : 
-		affichage_fin() : btnRetry(100, 450, 200, 60, L"Je recommence!", sf::Color(70, 70, 70), sf::Color(100, 100, 100), sf::Color(50, 50, 50)),
-			btnMenu(500, 450, 200, 60, "Menu", sf::Color(70, 70, 70), sf::Color(100, 100, 100), sf::Color(50, 50, 50))
+		affichage_menu() : btnPlay(290, 420, 220, 70, L"Jouer", sf::Color(70, 70, 70), sf::Color(100, 100, 100), sf::Color(50, 50, 50)),
+			btnCharacter(100, 350, 180, 50, "Personnage", sf::Color(70, 70, 70), sf::Color(100, 100, 100), sf::Color(50, 50, 50)),
+			btnSettings(520, 350, 180, 50, L"Reglages", sf::Color(70, 70, 70), sf::Color(100, 100, 100), sf::Color(50, 50, 50))
 			{
 
 			
@@ -28,16 +30,16 @@ class affichage_fin {
 		       throw( "Erreur : Impossible de charger la police 'TheyPerished.ttf'." );
 		    }
 
-		    if (!backGroundTexture.loadFromFile("./assets/autre/LabyrinthexMonstre.png")) throw( "Erreur : Impossible de charger l'image de fond." );;
+		    if (!backGroundTexture.loadFromFile("./assets/autre/chemin-dans-la-forêt-sombre-et-effrayante.png")) throw( "Erreur : Impossible de charger l'image de fond." );;
 		    
 			backGroundSprite.setTexture(backGroundTexture);
 			backGroundSprite.setScale(800.f / backGroundTexture.getSize().x, 600.f / backGroundTexture.getSize().y);	//redimensionner l'image à la taille de la fenêtre
 
 			
-			Nom_Jeu.setString("Game Over");
+			Nom_Jeu.setString("Labyrinthe");
 			Nom_Jeu.setFont(font1);
 			Nom_Jeu.setCharacterSize(80);
-		    Nom_Jeu.setFillColor(sf::Color::Red);
+		    Nom_Jeu.setFillColor(sf::Color::White);
 		    Nom_Jeu.setStyle(sf::Text::Bold);
 
 		    // Centrage du titre
@@ -45,37 +47,41 @@ class affichage_fin {
 		    Nom_Jeu.setPosition(400, 150);
 
 		    subNom_Jeu.setFont(font1);
-		    subNom_Jeu.setString("Le Labyrinthe a eu raison de vous");
+		    subNom_Jeu.setString("Ne vous retournez pas...");
 		    subNom_Jeu.setCharacterSize(30);
 		    subNom_Jeu.setFillColor(sf::Color::White);
 		    subNom_Jeu.setOrigin(subNom_Jeu.getLocalBounds().width / 2.f, subNom_Jeu.getLocalBounds().height / 2.f);
 		    subNom_Jeu.setPosition(400, 250);
-
-			
 		}
 
 		void update(float dt, sf::Vector2i posSouris){
 			flicker+=0.005;
 			Nom_Jeu.setPosition(400,150+std::sin(flicker)*5);
 			subNom_Jeu.setPosition(400,250+std::sin(flicker+1)*5);
-			btnRetry.update(posSouris);
-    		btnMenu.update(posSouris);
+			btnPlay.update(posSouris);
+    		btnCharacter.update(posSouris);
+			btnSettings.update(posSouris);
 		}
 
 		void afficherTitre(sf::RenderWindow& window) {
 			window.draw(backGroundSprite);
 			window.draw(Nom_Jeu);
 			window.draw(subNom_Jeu);
-			btnMenu.afficherBouton(window);
-			btnRetry.afficherBouton(window);
+			btnCharacter.afficherBouton(window);
+			btnPlay.afficherBouton(window);
+			btnSettings.afficherBouton(window);
 		}
 
-		bool RetryIsPressed(sf::Vector2i mousePos){
-			return btnRetry.isPressed(mousePos);
+		bool PlayIsPressed(sf::Vector2i mousePos){
+			return btnPlay.isPressed(mousePos);
 		}
 
-		bool MenuIsPressed(sf::Vector2i mousePos) {
-			return btnMenu.isPressed(mousePos);
+		bool SettingsIsPressed(sf::Vector2i mousePos) {
+			return btnSettings.isPressed(mousePos);
+		}
+
+		bool CharacterIsPressed(sf::Vector2i mousePos) {
+			return btnCharacter.isPressed(mousePos);
 		}
 };
 

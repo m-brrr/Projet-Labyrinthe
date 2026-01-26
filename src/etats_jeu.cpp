@@ -19,7 +19,7 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 								Direction maDirection=monPerso.get_orientation();
 								std::string typeDeSpell=monPerso.getSpellType();
 								int Level=monPerso.getLevel();
-								spells.push_back(std::make_unique<Spell>(0,0, Level, maDirection, typeDeSpell));	//On rajoute le sort à la liste des choses à afficher
+								spells.push_back(std::make_unique<Spell>(0,0, Level, maDirection, typeDeSpell, monPerso, sf::Vector2f(400,300)));	//On rajoute le sort à la liste des choses à afficher
 							}
 						}
 					/*
@@ -95,7 +95,7 @@ void GameState::update(float dt)  {
 							(*it)->Spell_animateMov();
 							bool spellDestroyed = false;
 
-						    if ((*it)->didTouchCharacter(monPerso.getBoundsCharacter())) {
+						    if ((*it)->didTouchCharacter(monPerso.getBoundsCharacter(),monPerso)) {
 						        std::cout << "YESSS" << std::endl;
 						        monPerso.take_damage((*it)->getSpellLevel());
 						        spellDestroyed = true; // Supprime l'élément et met à jour l'itérateur
@@ -103,7 +103,7 @@ void GameState::update(float dt)  {
 
 							if (!spellDestroyed) {
 						        for (auto& enemy : allEnemies) {
-						            if ((*it)->didTouchCharacter(enemy->getBoundsCharacter())) {
+						            if ((*it)->didTouchCharacter(enemy->getBoundsCharacter(),*enemy)) {
 						                std::cout << "Ennemi touché !" << std::endl;
 						                enemy->take_damage((*it)->getSpellLevel());
 						                spellDestroyed = true;
@@ -175,7 +175,8 @@ void EndState::handleEvent() {
                 machine.changeStateRequest(StatesNames::Game);
             }
             if (titreFin.MenuIsPressed(mousePos)) {
-                // machine.changeState(new MenuState(machine, fenetre));
+                machine.addState(StatesNames::Menu, std::move(std::make_unique<MenuState>(machine, window)));
+                machine.changeStateRequest(StatesNames::Menu);
             }
         }
     }
@@ -189,5 +190,40 @@ void EndState::update(float dt) {
 void EndState::render() {
 	window.clear();
 	titreFin.afficherTitre(window);
+	window.display();
+}
+
+		//Page de Menu
+
+void MenuState::handleEvent() {
+	sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) window.close();
+
+        // Interaction avec les boutons
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (menu.PlayIsPressed(mousePos)) {
+				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window)));
+                machine.changeStateRequest(StatesNames::Game);
+            }
+            if (menu.CharacterIsPressed(mousePos)) {
+                // machine.changeState(new MenuState(machine, fenetre));
+            }
+			if (menu.SettingsIsPressed(mousePos)) {
+                // machine.changeState(new MenuState(machine, fenetre));
+            }
+        }
+    }
+}	
+
+void MenuState::update(float dt) {
+	sf::Vector2i posSouris = sf::Mouse::getPosition(window);
+    menu.update(dt, posSouris);
+}
+
+void MenuState::render() {
+	window.clear();
+	menu.afficherTitre(window);
 	window.display();
 }

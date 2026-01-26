@@ -12,7 +12,7 @@ private:
     sf::Color activeColor;
 
 public:
-    Button(float x, float y, float width, float height, std::string message, 
+    Button(float x, float y, float width, float height, sf::String message, 
            sf::Color passive, sf::Color hover, sf::Color active) {
 
 				//Chargement police

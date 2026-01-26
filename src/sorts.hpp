@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
+#include "personnage.hpp"
+
+
 
 class Spell {
 	protected :
@@ -15,7 +18,9 @@ class Spell {
 
 		int spellLevel=1;
 		float speed = 400*spellLevel; //à modifier avec le niveau du joueur, ulterieurement
-		
+		const personnage& emetteur;	
+		sf::Vector2f playerPos;
+
 		Direction maDirection;
 		// SpellType monSpell;    Sera utile lorsqu'on aura réussi à transformer les enum en string. Avec un stringify ?
 		std::string SpellChosen;
@@ -29,7 +34,7 @@ class Spell {
 		float animationDelay=0.1f;
 
 	public :
-		Spell(int x, int y, int Level, Direction dir, std::string typeDeSpell) : posInitX(x), posInitY(y), spellLevel(Level), posActX(x), posActY(y), maDirection(dir) 
+		Spell(int x, int y, int Level, Direction dir, std::string typeDeSpell, const personnage& theEmittor, sf::Vector2f playerPosition) : posInitX(x), posInitY(y), spellLevel(Level), posActX(x), posActY(y), maDirection(dir), emetteur(theEmittor), playerPos(playerPosition) 
 		{
 			SpellChosen=typeDeSpell;
 			std::string path = "./assets/spells/" + SpellChosen + ".png";
@@ -59,11 +64,7 @@ class Spell {
 				theSpellSprite.setScale(0.1,0.1);
 
 				theSpellSprite.setRotation(90.f*(convertToNumberSpell(maDirection)+3));	//Rotation par rapport à l'origine (ie au centre du spell)
-				theSpellSprite.setPosition(spellProduction(maDirection));
-				
-		
-
-				
+				theSpellSprite.setPosition(playerPos);
 				
 		}
 
@@ -76,6 +77,10 @@ class Spell {
 
 		int getSpellLevel() const{
 			return spellLevel;
+		}
+
+		const personnage* getEmittor() const {
+			return &emetteur;
 		}
 
 		void setPosition(float dt,sf::Vector2f LabyMov){	//Position relative au personnage, qui est au centre de l'écran
@@ -99,8 +104,10 @@ class Spell {
 			window.draw(theSpellSprite);
 		}
 
-		bool didTouchCharacter(const sf::FloatRect& boundsPersonnage) const {
-        	return theSpellSprite.getGlobalBounds().intersects(boundsPersonnage);
+		bool didTouchCharacter(const sf::FloatRect& boundsPersonnage, const personnage& victime) const {
+			
+			if (&victime!=&emetteur) return theSpellSprite.getGlobalBounds().intersects(boundsPersonnage);	//on ne touche que si ce n'est pas notre sort
+			else return false;
     	}
 
 		bool isOutOfScreen(float windowWidth, float windowHeight) const {
