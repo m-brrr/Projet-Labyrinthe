@@ -129,7 +129,7 @@ class personnage {
 		}
 
 		virtual void take_damage(int spellLevel){
-			damageDisplay=3;			//Le visuel des dégats -> devient rouge
+			damageDisplay=5;			//Le visuel des dégats -> devient rouge
 			HealthPoint-=(100*spellLevel);		//La perte de points de vie
 		}
 };
@@ -206,7 +206,9 @@ class monster : public personnage {
 			}
         	
 			*/
-			character.setPosition(enemyAbsPos-playerPos+sf::Vector2f(400.f, 300.f));
+			sf::Vector2f inScreenPosition=enemyAbsPos-playerPos+sf::Vector2f(400.f, 300.f);
+			character.setPosition(inScreenPosition);
+			barreVie.updatePosition(inScreenPosition);
 			perso_animateMov();
 		}
 
@@ -295,5 +297,26 @@ class monster : public personnage {
 		void setScreenPosition(sf::Vector2f LabyMov){
 			character.setPosition(enemyAbsPos+ LabyMov);
 		}
+
+		void afficher_perso(sf::RenderWindow& window) override {
+			personnage::afficher_perso(window);
+			barreVie.afficherBarreDeVie(window);
+		}
+	
+		void take_damage(int spellLevel) override {
+
+			personnage::take_damage(spellLevel);
+
+			if (HealthPoint>0) {
+				float percentage = HealthPoint/HealthMax;
+				std::cout<<percentage<<std::endl;
+				barreVie.setPercentage(percentage);
+			}
+			else {
+				barreVie.setPercentage(0.f);
+				std::cout<<"C'est Perdu !"<<std::endl;
+			}
+		}
+	
 	};
 

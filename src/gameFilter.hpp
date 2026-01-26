@@ -28,8 +28,7 @@ class BarreDeVie {
 
 			//La taille du spellSprite est de 106x10
 				const int spriteWidth=106;
-				const int spriteHeight=10;
-				
+				const int spriteHeight=10;	
 		}
 
 		void afficherBarreDeVie(sf::RenderWindow &window){
@@ -45,17 +44,21 @@ class BarreDeVie {
 class PlayerBarreDeVie : public BarreDeVie {
 	public :
 		PlayerBarreDeVie() : BarreDeVie() {
-			spriteBarre.setPosition(200.f,550.f);
+			spriteBarre.setOrigin(spriteBarre.getLocalBounds().width/2, spriteBarre.getLocalBounds().height/2);
+			spriteBarre.setPosition(400.f,550.f);
+			float scaleX = 4*spriteBarre.getLocalBounds().width;
+			float scaleY = 1.5*spriteBarre.getLocalBounds().height;
 			spriteBarre.setScale(4.f, 1.5);
 			
 			float recWidth=spriteBarre.getGlobalBounds().width-40.f;
 			float recHeight=spriteBarre.getGlobalBounds().height-10.f;
+			square.setSize(sf::Vector2f(recWidth,recHeight));
 
-			sf::RectangleShape rectangle(sf::Vector2f(recWidth, recHeight));
+			square.setOrigin(0.f, square.getLocalBounds().height/ 2.f);
+			float rectX = spriteBarre.getPosition().x - (spriteBarre.getGlobalBounds().width / 2.f) + 20.f;
+			float rectY = spriteBarre.getPosition().y; // Même hauteur que le centre de la barre
 
-			square=rectangle;
-
-			square.setPosition(220.f,555.f);
+			square.setPosition(rectX, rectY);
 			square.setFillColor(sf::Color::Green);
 		}
 };
@@ -63,21 +66,39 @@ class PlayerBarreDeVie : public BarreDeVie {
 class EnemyBarreDeVie : public BarreDeVie {
 
 	private :
-		sf::Vector2f enemyRelPosition;
+		sf::Vector2f enemyRelPosition;	//position à l'écran
+		float offsetAuDessus = 45.f; 
 
 	public :
-		EnemyBarreDeVie(sf::Vector2f Position) : BarreDeVie(), enemyRelPosition(Position) {
-				spriteBarre.setPosition(Position);
-				spriteBarre.setScale(1.f, 1.f);	//à régler
+		EnemyBarreDeVie(sf::Vector2f charPosition) : BarreDeVie(), enemyRelPosition(charPosition) {
+		
+			float paddingX = 5.f;
+			float paddingY = 3.f;
+			
+			sf::FloatRect b = spriteBarre.getLocalBounds();
+			spriteBarre.setOrigin(b.width / 2.f, b.height / 2.f);
+			spriteBarre.setPosition(enemyRelPosition.x, enemyRelPosition.y - offsetAuDessus);
 
-				float recWidth=spriteBarre.getGlobalBounds().width-10.f;	//à régler
-				float recHeight=spriteBarre.getGlobalBounds().height-4.f;	//à régler
+			
+			float internalWidth = b.width - (paddingX * 2.f);
+			float internalHeight = b.height - (paddingY * 2.f);
+			square.setSize(sf::Vector2f(internalWidth, internalHeight));
 
-				sf::RectangleShape rectangle(sf::Vector2f(recWidth, recHeight));
+			
+			square.setOrigin(0.f, internalHeight / 2.f);
+			float rectX = spriteBarre.getPosition().x - (b.width / 2.f) + paddingX;
+			float rectY = spriteBarre.getPosition().y; // Même hauteur que le centre de la barre
 
-				square=rectangle;
+			square.setPosition(rectX, rectY);
+			square.setFillColor(sf::Color::Green);
+		}
 
-				square.setPosition(enemyRelPosition+sf::Vector2f(5.f,3.f));
-				square.setFillColor(sf::Color::Green);
+		void updatePosition(sf::Vector2f position){
+			enemyRelPosition=position;
+			spriteBarre.setPosition(enemyRelPosition.x,enemyRelPosition.y-offsetAuDessus);
+			float rectX = spriteBarre.getPosition().x - (spriteBarre.getGlobalBounds().width / 2.f) + 5.f;
+			float rectY = spriteBarre.getPosition().y; // Même hauteur que le centre de la barre
+
+			square.setPosition(rectX, rectY);
 		}
 };
