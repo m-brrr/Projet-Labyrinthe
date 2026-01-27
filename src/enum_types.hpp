@@ -52,5 +52,9 @@ enum class StatesNames {
 };
 
 enum class SoundEffectNames {
-	BruitPas, BruitLancerSort, BruitExplosionSort, BruitSouffle, BruitMortEnemi
+	BruitPas, BruitLancerSort, BruitExplosionSort, BruitSouffle, BruitMortEnemi, Click
+};
+
+enum class MusicNames {
+	MusicMenu, MusicGame
 };

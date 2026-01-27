@@ -27,7 +27,7 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 						{
 							std::cout<<"Mise en Pause"<<std::endl;
-							machine.addState(StatesNames::Pause, std::move(std::make_unique<BreakState>(machine, window)));
+							machine.addState(StatesNames::Pause, std::move(std::make_unique<BreakState>(machine, window, regieSon)));
                 			machine.changeStateRequest(StatesNames::Pause);
 						}
 							
@@ -44,7 +44,7 @@ void GameState::update(float dt)  {
 							LabyMov=theMap.getMov(dt, Direction::Left);
 
 							monPerso.setDirection(Direction::Left);
-							monPerso.perso_animateMov();
+							monPerso.perso_animateMov(regieSon);
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			            {
@@ -52,7 +52,7 @@ void GameState::update(float dt)  {
 							LabyMov=theMap.getMov(dt, Direction::Right);
 
 							monPerso.setDirection(Direction::Right);
-							monPerso.perso_animateMov();
+							monPerso.perso_animateMov(regieSon);
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			            {
@@ -60,7 +60,7 @@ void GameState::update(float dt)  {
 							LabyMov=theMap.getMov(dt, Direction::Up);
 
 							monPerso.setDirection(Direction::Up);
-							monPerso.perso_animateMov();
+							monPerso.perso_animateMov(regieSon);
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			            {
@@ -68,7 +68,7 @@ void GameState::update(float dt)  {
 							LabyMov=theMap.getMov(dt, Direction::Down);
 
 							monPerso.setDirection(Direction::Down);
-							monPerso.perso_animateMov();
+							monPerso.perso_animateMov(regieSon);
 						}
 					//Mettre à jour la position des sorts par rapport au personnage
 					
@@ -85,7 +85,7 @@ void GameState::update(float dt)  {
 						
 					//Mise à jour des enemis
 						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
-							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt, spells, theMap);
+							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt, spells, theMap, regieSon);
 							
 							++it; // Passe au monstre suivant
 						}
@@ -131,7 +131,7 @@ void GameState::update(float dt)  {
 						//mettre à jour la vue (ie le rayCasting)
 						if (monPerso.getHealthPoints()<=0){
 							std::cout<<"You Lost"<<std::endl;
-							machine.addState(StatesNames::GameOver, std::move(std::make_unique<EndState>(machine, window)));
+							machine.addState(StatesNames::GameOver, std::move(std::make_unique<EndState>(machine, window, regieSon)));
                 			machine.changeStateRequest(StatesNames::GameOver);
 						}
 						myView.update(grilleLaby.get_grille(),playerPos, 150);
@@ -177,11 +177,13 @@ void EndState::handleEvent() {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             if (titreFin.RetryIsPressed(mousePos)) {
-				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window)));
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window, regieSon)));
                 machine.changeStateRequest(StatesNames::Game);
             }
             if (titreFin.MenuIsPressed(mousePos)) {
-                machine.addState(StatesNames::Menu, std::move(std::make_unique<MenuState>(machine, window)));
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+                machine.addState(StatesNames::Menu, std::move(std::make_unique<MenuState>(machine, window, regieSon)));
                 machine.changeStateRequest(StatesNames::Menu);
             }
         }
@@ -210,8 +212,10 @@ void MenuState::handleEvent() {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
             if (menu.PlayIsPressed(mousePos)) {
-				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window)));
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window, regieSon)));
                 machine.changeStateRequest(StatesNames::Game);
+				regieSon.playMusic(MusicNames::MusicGame);
             }
             if (menu.CharacterIsPressed(mousePos)) {
                 // machine.changeState(new MenuState(machine, fenetre));
@@ -243,11 +247,16 @@ void BreakState::handleEvent() {
         // Interaction avec les boutons
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            if (pause.PlayIsPressed(mousePos)) {
+            regieSon.pauseMusic();
+			if (pause.PlayIsPressed(mousePos)) {
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
                 machine.changeStateRequest(StatesNames::Game);
+				regieSon.playMusic(MusicNames::MusicGame);
             }
             if (pause.MenuIsPressed(mousePos)) {
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
                 machine.changeStateRequest(StatesNames::Menu);
+				regieSon.playMusic(MusicNames::MusicMenu);
             }
 			if (pause.SettingsIsPressed(mousePos)) {
                 // machine.changeState(new MenuState(machine, fenetre));

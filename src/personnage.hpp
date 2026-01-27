@@ -10,6 +10,7 @@
 #include "sorts.hpp"
 #include "gameFilter.hpp"
 #include "terrain.hpp"
+#include "gestion_son.hpp"
 
 class personnage {
 	protected :
@@ -31,7 +32,8 @@ class personnage {
 		sf::Clock animation_clock;	//chaque personnage a sa propre horloge pour ses animations
 		sf::Clock attack_clock;
 		float attackDelay=0.3f;
-
+		float lastFootstepFrame=-1; //dernière frame avant 
+		int soundVolume;
 		int damageDisplay;	//sert à l'effet de rouge lorsque le perso prend un dégat
 
 
@@ -104,12 +106,18 @@ class personnage {
 			maDirection=newDirection;
 		}
 
-		void perso_animateMov(){	//La fonction dépend de l'orientation
+		void perso_animateMov(Son& regieSon){	//La fonction dépend de l'orientation
 			if (animation_clock.getElapsedTime().asSeconds()>= animationDelay){	//getElapsedTime donne le tps écoulé depuis le dernier redémarrage
 				postureAct= (postureAct+1)%8;
 				animation_clock.restart();
-			}
+		
+            // Jouer le bruit de pas sur les frames 1 et 5 (quand le pied touche le sol)
+            if ((postureAct == 1 || postureAct == 5) && lastFootstepFrame != postureAct) {
+                regieSon.jouerSon(SoundEffectNames::BruitPas, soundVolume);// Volume réduit
+                lastFootstepFrame = postureAct;
+            }
 		}
+	}
 
 		virtual void afficher_perso(sf::RenderWindow &window) {
 			int i=convertToNumberCharacter(maDirection);
@@ -148,6 +156,7 @@ class playerPerso : public personnage {
 
 		playerPerso(Direction o, std::string perso_choisi) : personnage(o,perso_choisi), maBarreDeVie() {
 			character.setPosition(400.f,300.f);
+			soundVolume=20.f;
 		}
 
 		void take_damage(int spellLevel) override {
@@ -188,11 +197,13 @@ class monster : public personnage {
 		monster(Direction o, std::string perso_choisi, sf::Vector2f enemyPosition) : personnage(o,perso_choisi), enemyAbsPos(enemyPosition), barreVie(enemyPosition) {
 			character.setPosition(enemyAbsPos);
 			theState=EnemyState::Patrol;
+			soundVolume=0;
 		}
 
-		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt, std::vector<std::unique_ptr<Spell>>& Spells,  Map &theMap){
+		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt, std::vector<std::unique_ptr<Spell>>& Spells,  Map &theMap, Son& regieSon){
 			bool playerIsVisible = canSeePlayer(playerPos,maze, tileWidth );
-			
+			if(playerIsVisible) soundVolume=15;
+			else soundVolume=0;
 			
 			switch (theState) {
             case EnemyState::Patrol:
@@ -221,7 +232,7 @@ class monster : public personnage {
 			inScreenPos=enemyAbsPos-playerPos+sf::Vector2f(400.f, 300.f);
 			character.setPosition(inScreenPos);
 			barreVie.updatePosition(inScreenPos);
-			perso_animateMov();
+			perso_animateMov(regieSon);
 		}
 
 		void updatePatrol(float dt, float tileWidth, sf::Vector2f playerPos,  Map &theMap){

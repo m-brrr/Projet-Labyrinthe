@@ -5,13 +5,15 @@
 #include "terrain.hpp"
 #include "personnage.hpp"
 #include "enum_types.hpp"
-
+#include "gestion_son.hpp"
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(800,600), "Labyrinthe");
     StateMachine machine;
-    machine.addState(StatesNames::Menu, std::make_unique<MenuState>(machine, window));
+	Son regieSon;
+    machine.addState(StatesNames::Menu, std::make_unique<MenuState>(machine, window,regieSon));
 	machine.setCurrentState(StatesNames::Menu);
+	regieSon.playMusic(MusicNames::MusicMenu);
 
 	sf::Clock gameClock;
 

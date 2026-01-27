@@ -17,4 +17,4 @@ add_executable(projet_labyrinthe src/main.cpp src/etats_jeu.cpp src/labyrinthe.c
 
 
 # Lie l'executable aux bibliothèques nécessaires
-target_link_libraries(projet_labyrinthe PRIVATE sfml-graphics sfml-window sfml-system)
+target_link_libraries(projet_labyrinthe PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)

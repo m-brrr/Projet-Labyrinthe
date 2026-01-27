@@ -290,6 +290,25 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/fonctions_generales.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/sorts.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/gameFilter.hpp \
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/gestion_son.hpp \
+ /usr/include/SFML/Audio.hpp /usr/include/SFML/Audio/InputSoundFile.hpp \
+ /usr/include/SFML/Audio/Export.hpp /usr/include/SFML/Audio/Listener.hpp \
+ /usr/include/SFML/Audio/Music.hpp \
+ /usr/include/SFML/Audio/SoundStream.hpp \
+ /usr/include/SFML/Audio/SoundSource.hpp \
+ /usr/include/SFML/Audio/AlResource.hpp \
+ /usr/include/SFML/Audio/OutputSoundFile.hpp \
+ /usr/include/SFML/Audio/Sound.hpp \
+ /usr/include/SFML/Audio/SoundBuffer.hpp /usr/include/c++/13/set \
+ /usr/include/c++/13/bits/stl_set.h \
+ /usr/include/c++/13/bits/stl_multiset.h \
+ /usr/include/SFML/Audio/SoundBufferRecorder.hpp \
+ /usr/include/SFML/Audio/SoundRecorder.hpp \
+ /usr/include/SFML/Audio/SoundFileFactory.hpp \
+ /usr/include/SFML/Audio/SoundFileFactory.inl \
+ /usr/include/SFML/Audio/SoundFileReader.hpp \
+ /usr/include/SFML/Audio/SoundFileWriter.hpp /usr/include/c++/13/list \
+ /usr/include/c++/13/bits/stl_list.h /usr/include/c++/13/bits/list.tcc \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/RayTracing.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/game_over.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/boutons.hpp \

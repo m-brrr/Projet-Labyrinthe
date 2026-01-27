@@ -9,12 +9,30 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   src/fonctions_generales.hpp \
   src/gameFilter.hpp \
   src/game_over.hpp \
+  src/gestion_son.hpp \
   src/labyrinthe.hpp \
   src/page_menu.hpp \
   src/page_pause.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
   src/terrain.hpp \
+  /usr/include/SFML/Audio.hpp \
+  /usr/include/SFML/Audio/AlResource.hpp \
+  /usr/include/SFML/Audio/Export.hpp \
+  /usr/include/SFML/Audio/InputSoundFile.hpp \
+  /usr/include/SFML/Audio/Listener.hpp \
+  /usr/include/SFML/Audio/Music.hpp \
+  /usr/include/SFML/Audio/OutputSoundFile.hpp \
+  /usr/include/SFML/Audio/Sound.hpp \
+  /usr/include/SFML/Audio/SoundBuffer.hpp \
+  /usr/include/SFML/Audio/SoundBufferRecorder.hpp \
+  /usr/include/SFML/Audio/SoundFileFactory.hpp \
+  /usr/include/SFML/Audio/SoundFileFactory.inl \
+  /usr/include/SFML/Audio/SoundFileReader.hpp \
+  /usr/include/SFML/Audio/SoundFileWriter.hpp \
+  /usr/include/SFML/Audio/SoundRecorder.hpp \
+  /usr/include/SFML/Audio/SoundSource.hpp \
+  /usr/include/SFML/Audio/SoundStream.hpp \
   /usr/include/SFML/Config.hpp \
   /usr/include/SFML/Graphics.hpp \
   /usr/include/SFML/Graphics/BlendMode.hpp \
@@ -129,6 +147,7 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
   /usr/include/c++/13/bits/istream.tcc \
+  /usr/include/c++/13/bits/list.tcc \
   /usr/include/c++/13/bits/locale_classes.h \
   /usr/include/c++/13/bits/locale_classes.tcc \
   /usr/include/c++/13/bits/locale_conv.h \
@@ -169,12 +188,15 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   /usr/include/c++/13/bits/stl_iterator.h \
   /usr/include/c++/13/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/13/bits/stl_iterator_base_types.h \
+  /usr/include/c++/13/bits/stl_list.h \
   /usr/include/c++/13/bits/stl_map.h \
   /usr/include/c++/13/bits/stl_multimap.h \
+  /usr/include/c++/13/bits/stl_multiset.h \
   /usr/include/c++/13/bits/stl_numeric.h \
   /usr/include/c++/13/bits/stl_pair.h \
   /usr/include/c++/13/bits/stl_raw_storage_iter.h \
   /usr/include/c++/13/bits/stl_relops.h \
+  /usr/include/c++/13/bits/stl_set.h \
   /usr/include/c++/13/bits/stl_stack.h \
   /usr/include/c++/13/bits/stl_tempbuf.h \
   /usr/include/c++/13/bits/stl_tree.h \
@@ -222,6 +244,7 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \
+  /usr/include/c++/13/list \
   /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
   /usr/include/c++/13/memory \
@@ -235,6 +258,7 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   /usr/include/c++/13/pstl/pstl_config.h \
   /usr/include/c++/13/random \
   /usr/include/c++/13/ratio \
+  /usr/include/c++/13/set \
   /usr/include/c++/13/stack \
   /usr/include/c++/13/stdexcept \
   /usr/include/c++/13/streambuf \
@@ -1053,12 +1077,30 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   src/fonctions_generales.hpp \
   src/gameFilter.hpp \
   src/game_over.hpp \
+  src/gestion_son.hpp \
   src/labyrinthe.hpp \
   src/page_menu.hpp \
   src/page_pause.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
   src/terrain.hpp \
+  /usr/include/SFML/Audio.hpp \
+  /usr/include/SFML/Audio/AlResource.hpp \
+  /usr/include/SFML/Audio/Export.hpp \
+  /usr/include/SFML/Audio/InputSoundFile.hpp \
+  /usr/include/SFML/Audio/Listener.hpp \
+  /usr/include/SFML/Audio/Music.hpp \
+  /usr/include/SFML/Audio/OutputSoundFile.hpp \
+  /usr/include/SFML/Audio/Sound.hpp \
+  /usr/include/SFML/Audio/SoundBuffer.hpp \
+  /usr/include/SFML/Audio/SoundBufferRecorder.hpp \
+  /usr/include/SFML/Audio/SoundFileFactory.hpp \
+  /usr/include/SFML/Audio/SoundFileFactory.inl \
+  /usr/include/SFML/Audio/SoundFileReader.hpp \
+  /usr/include/SFML/Audio/SoundFileWriter.hpp \
+  /usr/include/SFML/Audio/SoundRecorder.hpp \
+  /usr/include/SFML/Audio/SoundSource.hpp \
+  /usr/include/SFML/Audio/SoundStream.hpp \
   /usr/include/SFML/Config.hpp \
   /usr/include/SFML/Graphics.hpp \
   /usr/include/SFML/Graphics/BlendMode.hpp \
@@ -1173,6 +1215,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
   /usr/include/c++/13/bits/istream.tcc \
+  /usr/include/c++/13/bits/list.tcc \
   /usr/include/c++/13/bits/locale_classes.h \
   /usr/include/c++/13/bits/locale_classes.tcc \
   /usr/include/c++/13/bits/locale_conv.h \
@@ -1213,12 +1256,15 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   /usr/include/c++/13/bits/stl_iterator.h \
   /usr/include/c++/13/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/13/bits/stl_iterator_base_types.h \
+  /usr/include/c++/13/bits/stl_list.h \
   /usr/include/c++/13/bits/stl_map.h \
   /usr/include/c++/13/bits/stl_multimap.h \
+  /usr/include/c++/13/bits/stl_multiset.h \
   /usr/include/c++/13/bits/stl_numeric.h \
   /usr/include/c++/13/bits/stl_pair.h \
   /usr/include/c++/13/bits/stl_raw_storage_iter.h \
   /usr/include/c++/13/bits/stl_relops.h \
+  /usr/include/c++/13/bits/stl_set.h \
   /usr/include/c++/13/bits/stl_stack.h \
   /usr/include/c++/13/bits/stl_tempbuf.h \
   /usr/include/c++/13/bits/stl_tree.h \
@@ -1266,6 +1312,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \
+  /usr/include/c++/13/list \
   /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
   /usr/include/c++/13/memory \
@@ -1279,6 +1326,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   /usr/include/c++/13/pstl/pstl_config.h \
   /usr/include/c++/13/random \
   /usr/include/c++/13/ratio \
+  /usr/include/c++/13/set \
   /usr/include/c++/13/stack \
   /usr/include/c++/13/stdexcept \
   /usr/include/c++/13/streambuf \
@@ -1428,8 +1476,6 @@ src/labyrinthe.cpp:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/time_members.h:
 
-/usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h:
-
 /usr/include/x86_64-linux-gnu/c++/13/bits/messages_members.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/gthr.h:
@@ -1522,8 +1568,6 @@ src/labyrinthe.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
 
-/usr/include/x86_64-linux-gnu/bits/cpu-set.h:
-
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
 
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
@@ -1558,41 +1602,25 @@ src/labyrinthe.cpp:
 
 /usr/include/ctype.h:
 
-/usr/include/c++/13/bits/invoke.h:
+/usr/include/c++/13/vector:
 
-/usr/include/c++/13/bits/functional_hash.h:
-
-/usr/include/SFML/Graphics/RenderTarget.hpp:
-
-/usr/include/SFML/Window/Touch.hpp:
-
-/usr/include/c++/13/bits/functexcept.h:
-
-/usr/include/c++/13/bits/exception_ptr.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
-
-/usr/include/c++/13/bits/stl_multimap.h:
-
-/usr/include/c++/13/bits/exception.h:
-
-/usr/include/c++/13/bits/cxxabi_init_exception.h:
-
-/usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
-
-/usr/include/SFML/Window/Export.hpp:
-
-/usr/include/c++/13/bits/cpp_type_traits.h:
-
-/usr/include/x86_64-linux-gnu/bits/endianness.h:
-
-/usr/include/c++/13/bits/chrono.h:
-
-/usr/include/c++/13/bits/basic_string.h:
-
-/usr/include/SFML/System/Vector3.inl:
+/usr/include/c++/13/tr1/special_function_util.h:
 
 /usr/include/c++/13/tr1/poly_laguerre.tcc:
+
+/usr/include/c++/13/tr1/poly_hermite.tcc:
+
+/usr/include/c++/13/tr1/modified_bessel_func.tcc:
+
+/usr/include/c++/13/tr1/legendre_function.tcc:
+
+/usr/include/c++/13/tr1/gamma.tcc:
+
+/usr/include/c++/13/tr1/exp_integral.tcc:
+
+/usr/include/c++/13/tr1/ell_integral.tcc:
+
+/usr/include/c++/13/tr1/beta_function.tcc:
 
 /usr/include/c++/13/bits/basic_ios.tcc:
 
@@ -1601,10 +1629,6 @@ src/labyrinthe.cpp:
 /usr/include/c++/13/bits/basic_ios.h:
 
 /usr/include/c++/13/bits/atomic_lockfree_defines.h:
-
-/usr/include/c++/13/bits/concept_check.h:
-
-/usr/include/c++/13/bits/alloc_traits.h:
 
 /usr/include/c++/13/bits/atomic_base.h:
 
@@ -1622,21 +1646,13 @@ src/labyrinthe.cpp:
 
 /usr/include/c++/13/backward/auto_ptr.h:
 
-/usr/include/c++/13/bits/hash_bytes.h:
-
 /usr/include/c++/13/array:
-
-/usr/include/c++/13/bits/basic_string.tcc:
-
-/usr/include/c++/13/bits/allocated_ptr.h:
-
-/usr/include/c++/13/bit:
-
-/usr/include/alloca.h:
 
 /usr/include/SFML/Window/WindowStyle.hpp:
 
-/usr/include/SFML/System/ThreadLocalPtr.inl:
+/usr/include/c++/13/bits/alloc_traits.h:
+
+/usr/include/c++/13/bits/concept_check.h:
 
 /usr/include/SFML/Window/Sensor.hpp:
 
@@ -1644,37 +1660,27 @@ src/labyrinthe.cpp:
 
 /usr/include/SFML/Window/Mouse.hpp:
 
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
-
-/usr/include/c++/13/stack:
-
-/usr/include/c++/13/bits/stl_relops.h:
-
 /usr/include/c++/13/bits/stl_vector.h:
 
-/usr/include/c++/13/bits/ostream_insert.h:
+/usr/include/c++/13/type_traits:
+
+/usr/include/SFML/Window/GlResource.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
+
+/usr/include/SFML/Window/Export.hpp:
+
+/usr/include/c++/13/bits/cxxabi_init_exception.h:
 
 /usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
 /usr/include/SFML/Window/Context.hpp:
 
-/usr/include/c++/13/bits/erase_if.h:
+/usr/include/c++/13/bits/allocated_ptr.h:
 
-/usr/include/SFML/Graphics/VertexBuffer.hpp:
+/usr/include/c++/13/bit:
 
-/usr/include/c++/13/bits/shared_ptr_atomic.h:
-
-/usr/include/c++/13/vector:
-
-/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
-
-/usr/include/c++/13/bits/charconv.h:
-
-/usr/include/x86_64-linux-gnu/bits/errno.h:
-
-/usr/include/c++/13/bits/stl_pair.h:
-
-/usr/include/c++/13/cstdio:
+/usr/include/c++/13/bits/basic_string.tcc:
 
 /usr/include/SFML/System/Vector2.hpp:
 
@@ -1682,33 +1688,15 @@ src/labyrinthe.cpp:
 
 /usr/include/SFML/System/Utf.inl:
 
-/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
-
-/usr/include/c++/13/bits/exception_defines.h:
-
-/usr/include/SFML/Graphics/ConvexShape.hpp:
+src/gestion_son.hpp:
 
 /usr/include/SFML/System/ThreadLocal.hpp:
 
-/usr/include/c++/13/bits/allocator.h:
+/usr/include/libintl.h:
 
-/usr/include/c++/13/bits/stl_bvector.h:
+/usr/include/SFML/System/String.hpp:
 
-/usr/include/SFML/Window/WindowHandle.hpp:
-
-src/enum_types.hpp:
-
-/usr/include/SFML/Graphics/CircleShape.hpp:
-
-src/etats_jeu.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
-
-/usr/include/c++/13/string:
-
-/usr/include/SFML/System/Vector3.hpp:
-
-src/game_over.hpp:
+/usr/include/SFML/Audio/Music.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
 
@@ -1716,17 +1704,91 @@ src/game_over.hpp:
 
 /usr/include/SFML/Graphics/PrimitiveType.hpp:
 
+/usr/include/c++/13/stdexcept:
+
+/usr/include/SFML/System/NonCopyable.hpp:
+
+/usr/include/c++/13/istream:
+
+/usr/include/SFML/System/Mutex.hpp:
+
+/usr/include/c++/13/chrono:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
+
+/usr/include/asm-generic/errno.h:
+
+src/personnage.hpp:
+
+/usr/include/asm-generic/errno-base.h:
+
+/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
+
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/usr/include/c++/13/bits/streambuf_iterator.h:
+
+/usr/include/c++/13/tr1/riemann_zeta.tcc:
+
+/usr/include/SFML/Audio/SoundFileFactory.hpp:
+
+/usr/include/SFML/System/Vector3.inl:
+
+/usr/include/c++/13/bits/basic_string.h:
+
+/usr/include/SFML/Graphics/VertexBuffer.hpp:
+
+/usr/include/c++/13/set:
+
+/usr/include/c++/13/bits/shared_ptr_atomic.h:
+
+/usr/include/SFML/System/Thread.hpp:
+
+/usr/include/SFML/System/Export.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
+
+/usr/include/SFML/Graphics/VertexArray.hpp:
+
+/usr/include/stdio.h:
+
+/usr/include/c++/13/bits/stl_iterator_base_types.h:
+
+/usr/include/alloca.h:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h:
+
+/usr/include/SFML/Audio/OutputSoundFile.hpp:
+
+/usr/include/SFML/Audio/SoundFileFactory.inl:
+
+/usr/include/SFML/Graphics/Shape.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/cpu-set.h:
+
+/usr/include/SFML/Audio/SoundFileWriter.hpp:
+
+/usr/include/c++/13/typeinfo:
+
+src/sorts.hpp:
+
+/usr/include/c++/13/bits/stl_raw_storage_iter.h:
+
+/usr/include/SFML/System/ThreadLocalPtr.inl:
+
+/usr/include/SFML/Audio.hpp:
+
+/usr/include/SFML/Graphics/CircleShape.hpp:
+
+/usr/include/SFML/Audio/SoundBuffer.hpp:
+
+/usr/include/c++/13/backward/binders.h:
+
 /usr/include/SFML/Graphics/Export.hpp:
 
 /usr/include/SFML/Graphics/Sprite.hpp:
 
 /usr/include/c++/13/ext/aligned_buffer.h:
-
-/usr/include/c++/13/backward/binders.h:
-
-/usr/include/SFML/System/Export.hpp:
-
-/usr/include/SFML/System/Thread.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 
@@ -1738,25 +1800,61 @@ src/game_over.hpp:
 
 /usr/include/c++/13/limits:
 
-/usr/include/c++/13/bits/deque.tcc:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
-
-/usr/include/c++/13/bits/char_traits.h:
-
-src/etats_jeu.cpp:
-
-/usr/include/SFML/Graphics/Shape.hpp:
-
-/usr/include/SFML/Graphics/Drawable.hpp:
-
-/usr/include/c++/13/bits/vector.tcc:
-
 src/boutons.hpp:
 
-/usr/include/SFML/System/Mutex.hpp:
+src/terrain.hpp:
 
-/usr/include/c++/13/chrono:
+/usr/include/SFML/System/Utf.hpp:
+
+/usr/include/SFML/Audio/Listener.hpp:
+
+src/game_over.hpp:
+
+/usr/include/SFML/System/Vector3.hpp:
+
+/usr/include/SFML/Audio/Export.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
+
+/usr/include/c++/13/string:
+
+/usr/include/SFML/Audio/SoundSource.hpp:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/SFML/Window/WindowHandle.hpp:
+
+src/enum_types.hpp:
+
+/usr/include/SFML/Graphics/Image.hpp:
+
+/usr/include/SFML/Window/WindowBase.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h:
+
+/usr/include/SFML/System/InputStream.hpp:
+
+/usr/include/SFML/Audio/SoundStream.hpp:
+
+/usr/include/c++/13/pstl/glue_memory_defs.h:
+
+/usr/include/c++/13/exception:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/include/c++/13/bits/algorithmfwd.h:
+
+/usr/include/SFML/Window/Keyboard.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/opt_random.h:
+
+/usr/include/c++/13/ostream:
+
+src/labyrinthe.hpp:
+
+/usr/include/SFML/Graphics/Rect.inl:
+
+/usr/include/c++/13/cmath:
 
 src/fonctions_generales.hpp:
 
@@ -1764,11 +1862,27 @@ src/gameFilter.hpp:
 
 /usr/include/SFML/Window/Window.hpp:
 
-/usr/include/SFML/Graphics/Image.hpp:
+src/etats_jeu.cpp:
 
-/usr/include/SFML/Graphics/Font.hpp:
+/usr/include/SFML/Audio/AlResource.hpp:
 
-/usr/include/SFML/Window/VideoMode.hpp:
+/usr/include/SFML/System/Lock.hpp:
+
+/usr/include/SFML/Window/Touch.hpp:
+
+/usr/include/SFML/Graphics/RenderTarget.hpp:
+
+/usr/include/c++/13/bits/functional_hash.h:
+
+/usr/include/c++/13/bits/stl_bvector.h:
+
+/usr/include/SFML/Audio/SoundRecorder.hpp:
+
+/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h:
+
+/usr/include/SFML/Audio/Sound.hpp:
+
+/usr/include/c++/13/bits/char_traits.h:
 
 /usr/include/SFML/System/Sleep.hpp:
 
@@ -1778,69 +1892,55 @@ src/gameFilter.hpp:
 
 /usr/include/SFML/Graphics/Glyph.hpp:
 
+/usr/include/c++/13/tr1/hypergeometric.tcc:
+
+/usr/include/c++/13/bits/range_access.h:
+
 src/RayTracing.hpp:
 
 /usr/include/SFML/Graphics/Shader.hpp:
 
-/usr/include/SFML/Graphics/Transformable.hpp:
-
 /usr/include/SFML/Graphics/View.hpp:
 
-src/terrain.hpp:
+/usr/include/SFML/Graphics/Transformable.hpp:
 
-/usr/include/SFML/System/Utf.hpp:
+/usr/include/c++/13/bits/vector.tcc:
+
+/usr/include/SFML/Graphics/Drawable.hpp:
+
+/usr/include/SFML/Window/Cursor.hpp:
+
+/usr/include/c++/13/bits/stl_map.h:
+
+/usr/include/c++/13/bits/new_allocator.h:
+
+/usr/include/c++/13/bits/stl_uninitialized.h:
+
+/usr/include/SFML/Audio/SoundBufferRecorder.hpp:
+
+/usr/include/c++/13/locale:
+
+/usr/include/SFML/Graphics/BlendMode.hpp:
+
+/usr/include/SFML/Window/VideoMode.hpp:
+
+/usr/include/SFML/Graphics/Font.hpp:
+
+/usr/include/SFML/System.hpp:
+
+/usr/include/SFML/Graphics/Color.hpp:
+
+/usr/include/SFML/Graphics/ConvexShape.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/waitstatus.h:
+
+/usr/include/c++/13/bits/exception_defines.h:
 
 /usr/include/SFML/Graphics/Rect.hpp:
 
 /usr/include/SFML/Window/ContextSettings.hpp:
 
 /usr/include/c++/13/cerrno:
-
-/usr/include/SFML/Window/WindowBase.hpp:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h:
-
-/usr/include/SFML/System/InputStream.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/include/c++/13/bits/algorithmfwd.h:
-
-/usr/include/SFML/Window/Keyboard.hpp:
-
-/usr/include/c++/13/bits/ios_base.h:
-
-/usr/include/c++/13/iterator:
-
-/usr/include/SFML/Graphics/Rect.inl:
-
-/usr/include/c++/13/cmath:
-
-/usr/include/SFML/Graphics/Color.hpp:
-
-/usr/include/SFML/System.hpp:
-
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
-/usr/include/c++/13/bits/streambuf_iterator.h:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/opt_random.h:
-
-src/labyrinthe.hpp:
-
-/usr/include/c++/13/ostream:
-
-/usr/include/c++/13/tr1/riemann_zeta.tcc:
-
-/usr/include/c++/13/typeinfo:
-
-src/sorts.hpp:
-
-/usr/include/c++/13/bits/stl_raw_storage_iter.h:
-
-/usr/include/c++/13/bits/cxxabi_forced.h:
-
-/usr/include/c++/13/istream:
 
 /usr/include/SFML/Window/Vulkan.hpp:
 
@@ -1852,13 +1952,17 @@ src/sorts.hpp:
 
 /usr/include/SFML/Graphics/RectangleShape.hpp:
 
-/usr/include/c++/13/tr1/poly_hermite.tcc:
-
-/usr/include/libintl.h:
-
-/usr/include/SFML/System/String.hpp:
-
 /usr/include/SFML/System/MemoryInputStream.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/c++/13/stack:
+
+/usr/include/c++/13/bits/stl_relops.h:
+
+/usr/include/SFML/Audio/SoundFileReader.hpp:
+
+/usr/include/c++/13/ext/string_conversions.h:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
 
@@ -1880,13 +1984,13 @@ src/sorts.hpp:
 
 /usr/include/SFML/Graphics/RenderTexture.hpp:
 
+src/etats_jeu.hpp:
+
+/usr/include/SFML/Audio/InputSoundFile.hpp:
+
 /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h:
 
 /usr/include/SFML/Graphics/Texture.hpp:
-
-/usr/include/c++/13/bits/codecvt.h:
-
-/usr/include/c++/13/bits/stl_tree.h:
 
 /usr/include/SFML/System/Time.hpp:
 
@@ -1896,33 +2000,47 @@ src/sorts.hpp:
 
 /usr/include/c++/13/algorithm:
 
-/usr/include/SFML/Window/Cursor.hpp:
+/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
-/usr/include/SFML/Graphics/BlendMode.hpp:
+/usr/include/c++/13/bits/charconv.h:
 
-/usr/include/c++/13/bits/stl_map.h:
+/usr/include/x86_64-linux-gnu/bits/errno.h:
 
-/usr/include/c++/13/bits/new_allocator.h:
+/usr/include/c++/13/bits/stl_pair.h:
 
-/usr/include/c++/13/bits/stl_uninitialized.h:
+/usr/include/c++/13/cstdio:
 
-/usr/include/c++/13/locale:
+/usr/include/x86_64-linux-gnu/bits/endianness.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
+/usr/include/c++/13/bits/chrono.h:
 
-/usr/include/SFML/Graphics/VertexArray.hpp:
+/usr/include/c++/13/bits/stl_tree.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h:
+/usr/include/c++/13/bits/codecvt.h:
 
-/usr/include/asm-generic/errno.h:
+/usr/include/c++/13/bits/cpp_type_traits.h:
 
-src/personnage.hpp:
+/usr/include/c++/13/bits/cxxabi_forced.h:
 
-/usr/include/asm-generic/errno-base.h:
+/usr/include/c++/13/bits/deque.tcc:
 
-/usr/include/c++/13/bits/stl_iterator_base_funcs.h:
+/usr/include/c++/13/bits/exception.h:
 
-/usr/include/SFML/System/Lock.hpp:
+/usr/include/c++/13/bits/exception_ptr.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
+
+/usr/include/c++/13/bits/stl_multimap.h:
+
+/usr/include/c++/13/bits/functexcept.h:
+
+/usr/include/c++/13/bits/hash_bytes.h:
+
+/usr/include/c++/13/bits/invoke.h:
+
+/usr/include/c++/13/iterator:
+
+/usr/include/c++/13/bits/ios_base.h:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
@@ -1954,6 +2072,16 @@ src/page_pause.hpp:
 
 /usr/include/c++/13/bits/memoryfwd.h:
 
+/usr/include/c++/13/tuple:
+
+/usr/include/c++/13/bits/list.tcc:
+
+/usr/include/SFML/System/Thread.inl:
+
+/usr/include/SFML/System/Vector2.inl:
+
+/usr/include/c++/13/bits/nested_exception.h:
+
 /usr/include/x86_64-linux-gnu/gnu/stubs-64.h:
 
 /usr/include/c++/13/bits/node_handle.h:
@@ -1965,6 +2093,8 @@ src/page_pause.hpp:
 /usr/include/c++/13/bits/parse_numbers.h:
 
 /usr/include/c++/13/bits/std_abs.h:
+
+/usr/include/c++/13/bits/stl_multiset.h:
 
 /usr/include/c++/13/bits/uses_allocator.h:
 
@@ -2016,19 +2146,23 @@ src/fonctions_generales.cpp:
 
 /usr/include/c++/13/bits/utility.h:
 
-/usr/include/c++/13/tr1/beta_function.tcc:
-
 /usr/include/c++/13/utility:
 
 /usr/include/c++/13/bits/stl_heap.h:
 
-/usr/include/stdio.h:
+/usr/include/c++/13/bits/erase_if.h:
 
-/usr/include/c++/13/bits/stl_iterator_base_types.h:
+/usr/include/c++/13/bits/stl_list.h:
+
+/usr/include/c++/13/debug/assertions.h:
 
 /usr/include/SFML/Window/Joystick.hpp:
 
 /usr/include/c++/13/bits/stl_numeric.h:
+
+/usr/include/c++/13/bits/ostream_insert.h:
+
+/usr/include/c++/13/bits/stl_set.h:
 
 /usr/include/SFML/Window/Event.hpp:
 
@@ -2060,8 +2194,6 @@ src/fonctions_generales.cpp:
 
 /usr/include/c++/13/ext/atomicity.h:
 
-/usr/include/c++/13/tr1/gamma.tcc:
-
 /usr/include/c++/13/system_error:
 
 /usr/include/c++/13/compare:
@@ -2074,21 +2206,9 @@ src/fonctions_generales.cpp:
 
 /usr/include/c++/13/ratio:
 
-/usr/include/c++/13/debug/assertions.h:
-
 /usr/include/linux/errno.h:
 
 /usr/include/c++/13/debug/debug.h:
-
-/usr/include/c++/13/pstl/glue_memory_defs.h:
-
-/usr/include/c++/13/exception:
-
-/usr/include/SFML/Window.hpp:
-
-/usr/include/SFML/System/FileInputStream.hpp:
-
-/usr/include/c++/13/ext/alloc_traits.h:
 
 /usr/include/c++/13/new:
 
@@ -2100,13 +2220,11 @@ src/fonctions_generales.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
-/usr/include/c++/13/bits/stl_iterator.h:
-
 src/page_menu.hpp:
 
-/usr/include/c++/13/ext/numeric_traits.h:
+/usr/include/c++/13/bits/stl_iterator.h:
 
-/usr/include/c++/13/ext/string_conversions.h:
+/usr/include/c++/13/ext/numeric_traits.h:
 
 /usr/include/c++/13/ext/type_traits.h:
 
@@ -2115,6 +2233,14 @@ src/page_menu.hpp:
 /usr/include/c++/13/initializer_list:
 
 /usr/include/c++/13/ios:
+
+/usr/include/SFML/Window.hpp:
+
+/usr/include/SFML/System/FileInputStream.hpp:
+
+/usr/include/c++/13/ext/alloc_traits.h:
+
+/usr/include/c++/13/list:
 
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 
@@ -2129,33 +2255,3 @@ src/page_menu.hpp:
 /usr/include/c++/13/random:
 
 /usr/include/c++/13/pstl/pstl_config.h:
-
-/usr/include/SFML/System/NonCopyable.hpp:
-
-/usr/include/c++/13/stdexcept:
-
-/usr/include/c++/13/tr1/ell_integral.tcc:
-
-/usr/include/c++/13/tr1/exp_integral.tcc:
-
-/usr/include/c++/13/bits/range_access.h:
-
-/usr/include/c++/13/tr1/hypergeometric.tcc:
-
-/usr/include/SFML/Window/GlResource.hpp:
-
-/usr/include/c++/13/type_traits:
-
-/usr/include/c++/13/tr1/legendre_function.tcc:
-
-/usr/include/c++/13/tr1/modified_bessel_func.tcc:
-
-/usr/include/c++/13/tr1/special_function_util.h:
-
-/usr/include/SFML/System/Vector2.inl:
-
-/usr/include/SFML/System/Thread.inl:
-
-/usr/include/c++/13/bits/nested_exception.h:
-
-/usr/include/c++/13/tuple:

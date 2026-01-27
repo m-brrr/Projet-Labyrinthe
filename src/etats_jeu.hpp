@@ -16,6 +16,7 @@
 #include "page_menu.hpp"
 #include "page_pause.hpp"
 #include "sorts.hpp"
+#include "gestion_son.hpp"
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -23,10 +24,11 @@ class State {
 	protected : 
 		StateMachine& machine;
 		sf::RenderWindow& window;
+		Son& regieSon;
 	
 	public: 
 		//constructeur
-		State(StateMachine& LaMachine, sf::RenderWindow& fenetre) :machine(LaMachine), window(fenetre){};
+		State(StateMachine& LaMachine, sf::RenderWindow& fenetre, Son& leSon) :machine(LaMachine), window(fenetre), regieSon(leSon){};
 		
 		//destructeur
 		virtual ~State() = default;
@@ -60,8 +62,8 @@ class GameState : public State {
 	public :
 
 	//Constructeur :
-		GameState(StateMachine& machine, sf::RenderWindow& fenetre) : 
-			State(machine,fenetre), 
+		GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon) : 
+			State(machine,fenetre,leSon), 
 			monPerso(playerPerso(Direction::Up, "Child")),
 			grilleLaby(H, L),
 			myView(),
@@ -90,7 +92,7 @@ class EndState : public State{
 		affichage_fin titreFin;
 		
 	public :
-		EndState(StateMachine& machine, sf::RenderWindow& fenetre):  State(machine, fenetre),titreFin()
+		EndState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon):  State(machine, fenetre, leSon),titreFin()
 			{
 			std::cout<<"generation page de fin de jeu en cours..."<<std::endl;
 			}
@@ -107,7 +109,7 @@ class MenuState : public State {
 		affichage_menu menu;
 	public : 
 		//constructeur
-		MenuState(StateMachine& machine, sf::RenderWindow& fenetre) : State(machine, fenetre)
+		MenuState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon) : State(machine, fenetre, leSon), menu()
 		{
 			std::cout<<"generation page menu du jeu en cours..."<<std::endl;
 		}
@@ -124,7 +126,7 @@ class BreakState : public State {
 		affichage_pause pause;
 	public : 
 		//constructeur
-		BreakState(StateMachine &machine, sf::RenderWindow& fenetre) : State(machine, fenetre)
+		BreakState(StateMachine &machine, sf::RenderWindow& fenetre, Son& leSon) : State(machine, fenetre, leSon)
 		{
 			std::cout<<"generation page de pause du jeu en cours..."<<std::endl;
 		}
