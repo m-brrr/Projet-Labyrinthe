@@ -60,4 +60,24 @@ class Son {
 	            activeSounds.push_back(newSound);
 	        }
 		}
-};
+		void playMusic(const std::string& path, bool loop = true) {
+	        if (backgroundMusic.openFromFile(path)) {
+	            backgroundMusic.setLoop(loop);
+	            backgroundMusic.setVolume(musicVolume);
+	            backgroundMusic.play();
+	        }
+	    }
+
+	    void stopMusic() {
+	        backgroundMusic.stop();
+	    }
+
+	    void setSFXVolume(float volume) {
+	        sfxVolume = std::clamp(volume, 0.f, 100.f);
+	    }
+
+	    void setMusicVolume(float volume) {
+	        musicVolume = std::clamp(volume, 0.f, 100.f);
+	        backgroundMusic.setVolume(musicVolume);
+	    }
+	};
