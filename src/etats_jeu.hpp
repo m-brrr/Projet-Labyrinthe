@@ -3,6 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <memory>
+#include <iostream>
+#include <stack>
+
 #include "terrain.hpp"
 #include "labyrinthe.hpp"
 #include "personnage.hpp"
@@ -11,9 +14,8 @@
 #include "RayTracing.hpp"
 #include "game_over.hpp"
 #include "page_menu.hpp"
+#include "page_pause.hpp"
 #include "sorts.hpp"
-#include <iostream>
-#include <stack>
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -45,7 +47,6 @@ class GameState : public State {
     	grilleLabyrinthe grilleLaby; //La grille du labyrinthe (constituée de 0 et de 1)
 		Map theMap;		//Le labyrinthe réel (généré à partir de la grille)
 
-		PlayerBarreDeVie maBarre;
 		playerPerso monPerso;
 		
 		std::vector<std::unique_ptr<Spell>> spells;
@@ -61,10 +62,10 @@ class GameState : public State {
 	//Constructeur :
 		GameState(StateMachine& machine, sf::RenderWindow& fenetre) : 
 			State(machine,fenetre), 
-			maBarre(),
-			monPerso(playerPerso(Direction::Up, "Child", maBarre)),
+			monPerso(playerPerso(Direction::Up, "Child")),
 			grilleLaby(H, L),
-			myView()
+			myView(),
+			theMap(grilleLaby.get_grille())
 				{
 				std::cout<<"generation du monde en cours..."<<std::endl;
 				grilleLaby.afficher();	//on l'affiche dans la console	
@@ -117,11 +118,24 @@ class MenuState : public State {
 		void render() override;
 };
 
-/*
+
 class BreakState : public State {
-	public :
+	private :
+		affichage_pause pause;
+	public : 
+		//constructeur
+		BreakState(StateMachine &machine, sf::RenderWindow& fenetre) : State(machine, fenetre)
+		{
+			std::cout<<"generation page de pause du jeu en cours..."<<std::endl;
+		}
+		//méthodes 
+
+		void handleEvent() override;
+		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
+		void render() override;
 };
 
+/*
 class ChooseCharacterState : public State {
 	public : 
 };

@@ -4,9 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <iostream>
-#include "personnage.hpp"
 
-
+class personnage;
 
 class Spell {
 	protected :
@@ -19,7 +18,6 @@ class Spell {
 		int spellLevel=1;
 		float speed = 400*spellLevel; //à modifier avec le niveau du joueur, ulterieurement
 		const personnage& emetteur;	
-		sf::Vector2f playerPos;
 
 		Direction maDirection;
 		// SpellType monSpell;    Sera utile lorsqu'on aura réussi à transformer les enum en string. Avec un stringify ?
@@ -34,7 +32,7 @@ class Spell {
 		float animationDelay=0.1f;
 
 	public :
-		Spell(int x, int y, int Level, Direction dir, std::string typeDeSpell, const personnage& theEmittor, sf::Vector2f playerPosition) : posInitX(x), posInitY(y), spellLevel(Level), posActX(x), posActY(y), maDirection(dir), emetteur(theEmittor), playerPos(playerPosition) 
+		Spell(int x, int y, int Level, Direction dir, std::string typeDeSpell, const personnage& theEmittor) : posInitX(x), posInitY(y), spellLevel(Level), posActX(x), posActY(y), maDirection(dir), emetteur(theEmittor)
 		{
 			SpellChosen=typeDeSpell;
 			std::string path = "./assets/spells/" + SpellChosen + ".png";
@@ -64,7 +62,7 @@ class Spell {
 				theSpellSprite.setScale(0.1,0.1);
 
 				theSpellSprite.setRotation(90.f*(convertToNumberSpell(maDirection)+3));	//Rotation par rapport à l'origine (ie au centre du spell)
-				theSpellSprite.setPosition(playerPos);
+				theSpellSprite.setPosition(posActX,posActY);
 				
 		}
 

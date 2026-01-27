@@ -8,6 +8,7 @@
 
 class Map : public sf::Drawable, public sf::Transformable {
 	private: 
+			const std::vector<std::vector<int>> &maze;
 			sf::VertexArray m_vertices; //tableau des sommets pour dessiner les tuiles
 			sf::Texture m_tileset; //Texture contenant toutes les tuiles (inutile ici)
 			float speed=200.f;
@@ -24,6 +25,8 @@ class Map : public sf::Drawable, public sf::Transformable {
 			}
 
 	public :
+		Map(const std::vector<std::vector<int>> &laby) : maze(laby){}
+
 		void load(sf::Vector2u tileSize, const std::vector<std::vector<int>> maze, 
 				  unsigned int width, unsigned int height) {
 			
@@ -89,5 +92,24 @@ class Map : public sf::Drawable, public sf::Transformable {
 					case Direction::Down : return sf::Vector2f(0, -speed*deltaTime);
 				}
 				throw std::invalid_argument("problème de direction");
+			}
+
+			bool canMove(const sf::Sprite &theSprite,sf::Vector2f newPosition, float tileWidth){
+				float width=theSprite.getGlobalBounds().width;
+				float height=theSprite.getGlobalBounds().height;
+				float X=theSprite.getPosition().x;
+				float Y=theSprite.getPosition().y;
+				std::vector<sf::Vector2f> pointsToCheck = {
+				        {newPosition.x - width/2, newPosition.y - height/2}, // Coin haut-gauche
+				        {newPosition.x + width/2, newPosition.y - height/2}, // Coin haut-droit
+				        {newPosition.x - width/2, newPosition.y + height/2}, // Coin bas-gauche
+				        {newPosition.x + width/2, newPosition.y + height/2}  // Coin bas-droit
+						};
+				for (const auto &point : pointsToCheck){
+					if (maze[point.y/tileWidth][point.x/tileWidth] ==1){
+						return false;
+					}
+				}
+				return true;
 			}
 };

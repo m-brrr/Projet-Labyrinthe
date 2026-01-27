@@ -7,10 +7,9 @@
 
 #include "enum_types.hpp"
 #include "fonctions_generales.hpp"
-
+#include "sorts.hpp"
 #include "gameFilter.hpp"
-
-
+#include "terrain.hpp"
 
 class personnage {
 	protected :
@@ -27,19 +26,19 @@ class personnage {
 		float HealthMax=1000;
 		float HealthPoint = 1000;
 		int Level=1;
+		float animationDelay =0.1f;
 
 		sf::Clock animation_clock;	//chaque personnage a sa propre horloge pour ses animations
 		sf::Clock attack_clock;
-		float animationDelay =0.1f;
 		float attackDelay=0.3f;
 
-		int damageDisplay=0;	//sert à l'effet de rouge lorsque le perso prend un dégat
+		int damageDisplay;	//sert à l'effet de rouge lorsque le perso prend un dégat
 
 
 	
 	public :
 		//constucteur du personnage
-		personnage(Direction o, std::string perso_choisi) :  maDirection(o)
+		personnage(Direction o, std::string perso_choisi) :  maDirection(o), damageDisplay(0)
 		{
 			//On récupère la spriteSheet
 				character_type=perso_choisi;
@@ -129,8 +128,12 @@ class personnage {
 		}
 
 		virtual void take_damage(int spellLevel){
-			damageDisplay=5;			//Le visuel des dégats -> devient rouge
+			damageDisplay=20;			//Le visuel des dégats -> devient rouge
 			HealthPoint-=(100*spellLevel);		//La perte de points de vie
+		}
+
+		bool getHealthPoints(){
+			return HealthPoint;
 		}
 };
 
@@ -143,7 +146,7 @@ class playerPerso : public personnage {
 
 	public :
 
-		playerPerso(Direction o, std::string perso_choisi, PlayerBarreDeVie barreVie) : personnage(o,perso_choisi), maBarreDeVie(barreVie) {
+		playerPerso(Direction o, std::string perso_choisi) : personnage(o,perso_choisi), maBarreDeVie() {
 			character.setPosition(400.f,300.f);
 		}
 
@@ -161,12 +164,21 @@ class playerPerso : public personnage {
 				std::cout<<"C'est Perdu !"<<std::endl;
 			}
 		}
+
+		void afficher_perso(sf::RenderWindow &window) {
+			personnage::afficher_perso(window);
+		}
+
+		void afficher_barreVie(sf::RenderWindow &window){
+			maBarreDeVie.afficherBarreDeVie(window);
+		}
 };
 
 
 class monster : public personnage {
 	private :
 		sf::Vector2f enemyAbsPos;
+		sf::Vector2f inScreenPos;
 		EnemyState theState;
 		EnemyBarreDeVie barreVie;
 		int transitionState=1; //1 pour en transition, 0 sinon
@@ -178,17 +190,17 @@ class monster : public personnage {
 			theState=EnemyState::Patrol;
 		}
 
-		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt ){
+		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt, std::vector<std::unique_ptr<Spell>>& Spells,  Map &theMap){
 			bool playerIsVisible = canSeePlayer(playerPos,maze, tileWidth );
 			
 			
 			switch (theState) {
             case EnemyState::Patrol:
                 if (playerIsVisible) theState = EnemyState::Chase;
-                else updatePatrol(dt, tileWidth, playerPos); 
+                else updatePatrol(dt, tileWidth, playerPos, theMap); 
                 break;
 			case EnemyState::Chase:
-				if (playerIsVisible) updateChase(playerPos, dt);
+				if (playerIsVisible) updateChase(playerPos, dt,tileWidth, Spells, theMap);
 				else theState=EnemyState::Patrol;
 			}
 
@@ -206,21 +218,23 @@ class monster : public personnage {
 			}
         	
 			*/
-			sf::Vector2f inScreenPosition=enemyAbsPos-playerPos+sf::Vector2f(400.f, 300.f);
-			character.setPosition(inScreenPosition);
-			barreVie.updatePosition(inScreenPosition);
+			inScreenPos=enemyAbsPos-playerPos+sf::Vector2f(400.f, 300.f);
+			character.setPosition(inScreenPos);
+			barreVie.updatePosition(inScreenPos);
 			perso_animateMov();
 		}
 
-		void updatePatrol(float dt, float tileWidth, sf::Vector2f playerPos){
+		void updatePatrol(float dt, float tileWidth, sf::Vector2f playerPos,  Map &theMap){
 			sf::Vector2f posInGrid = sf::Vector2f(static_cast<int>(enemyAbsPos.x/tileWidth), static_cast<int>(enemyAbsPos.y/tileWidth));
 			float distToSide=tileWidth/6;
 			if ((enemyAbsPos.x-(posInGrid.x*tileWidth)>distToSide) && transitionState==1){
 				setDirection(Direction::Left);
+				//if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(-dt*speed,0.f),150.f)){
 				enemyAbsPos+=sf::Vector2f(-dt*speed,0.f);
 			}
 			else if ((enemyAbsPos.y-(posInGrid.y*tileWidth))>distToSide && transitionState==1){
 				setDirection(Direction::Up);
+				//if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(-dt*speed,0.f),150.f)){
 				enemyAbsPos+=sf::Vector2f(0.f, -dt*speed);
 			}
 			else {
@@ -264,35 +278,69 @@ class monster : public personnage {
 		   		}
 			}
 
-		void updateChase(sf::Vector2f playerAbsPos, float dt){
-			sf::Vector2f direction=sf::Vector2f(playerAbsPos.x-enemyAbsPos.x, playerAbsPos.y-enemyAbsPos.y);
-			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
-			sf::Vector2f normalizedDirection= direction*distanceToPlayer;
+		void updateChase(sf::Vector2f playerAbsPos, float dt, float tileWidth, std::vector<std::unique_ptr<Spell>>& Spells, Map &theMap) {
+		    sf::Vector2f diff = playerAbsPos - enemyAbsPos;
+		    float distSq = diff.x * diff.x + diff.y * diff.y;
+		    if (distSq < 1.0f) return; // si l'enemi est trop proche du joueur pour bouger
 
-			if (std::abs(normalizedDirection.x)>=std::abs(normalizedDirection.y)) {
-				if (normalizedDirection.x>=0) {	enemyAbsPos.x+=speed*dt;
-												maDirection=Direction::Right; }
-						
-						
-				else {	enemyAbsPos.x-=speed*dt;
-						maDirection=Direction::Left;}
-			}
-			else {
-				if (normalizedDirection.y>=0) {	enemyAbsPos.y+=speed*dt;
-												maDirection=Direction::Down;}
-				else {	enemyAbsPos.y-=speed*dt;
-						maDirection=Direction::Up;}
-			}
+		    float tolerance = 5.0f;
+		    float moveStep = speed * dt;
+
+		    if (std::abs(diff.x) > tolerance && std::abs(diff.y) > tolerance) {
+		        // On choisit l'axe où l'écart est le plus petit pour s'aligner
+		        if (std::abs(diff.x) < std::abs(diff.y)) {
+		            maDirection = (diff.x > 0) ? Direction::Right : Direction::Left;
+		            // On s'assure de ne pas dépasser la cible (clamp)
+		            float step = std::min(moveStep, std::abs(diff.x));
+		            enemyAbsPos.x += (diff.x > 0 ? 1 : -1) * step;
+		        } 
+		        else {
+		            maDirection = (diff.y > 0) ? Direction::Down : Direction::Up;
+		            float step = std::min(moveStep, std::abs(diff.y));
+		            enemyAbsPos.y += (diff.y > 0 ? 1 : -1) * step;
+		        }
+		    } 
+		    // si on est aligné
+		    else {
+		        maDirection = determinerDirection(diff.x, diff.y);
+		        if (canAttack()) {
+		            castASpell(Spells, maDirection);
+		        }
+		    }
 		}
 
-		bool canSeePlayer(sf::Vector2f playerAbsPos, const std::vector<std::vector<int>>& maze, int tileWidth ){
-			float distanceToPlayer=std::sqrt(std::pow(playerAbsPos.x-enemyAbsPos.x,2)+std::pow(playerAbsPos.y-enemyAbsPos.y,2));
-			float angle=std::atan2(playerAbsPos.y-enemyAbsPos.y,playerAbsPos.x-enemyAbsPos.x);
+		bool canSeePlayer(sf::Vector2f playerAbsPos, const std::vector<std::vector<int>>& maze, int tileWidth) {
+			const float PI = 3.14159265f;
+		    sf::Vector2f diff = playerAbsPos - enemyAbsPos;
+		    
+		    // Calcul de la distance au carré
+		    float distSqToPlayer = diff.x * diff.x + diff.y * diff.y;
+		    
+		    // Calcul de l'angle vers le joueur
+		    float angleToPlayer = std::atan2(diff.y, diff.x);
+		    
+		    float seeAngle;
+		    switch(maDirection) {
+		        case Direction::Down  : seeAngle = PI / 2.0f;  break;
+		        case Direction::Up    : seeAngle = -PI / 2.0f; break;
+		        case Direction::Left  : seeAngle = PI;         break;
+		        case Direction::Right : seeAngle = 0.0f;       break;
+		    }
+		    float angleDiff = angleToPlayer - seeAngle;
+		    while (angleDiff > PI) angleDiff -= 2 * PI;
+		    while (angleDiff < -PI) angleDiff += 2 * PI;
 
-			sf::Vector2f impact=getRayImpact(enemyAbsPos, angle, maze, tileWidth);
-			float distanceToImpact=std::sqrt(std::pow(impact.x-enemyAbsPos.x,2)+std::pow(impact.y-enemyAbsPos.y,2));
-			return distanceToImpact>=distanceToPlayer;
-		}
+		    //Vérification du cône de vision (ici 60 degrés de chaque côté)
+		    if (std::abs(angleDiff) < PI / 1.5f) {
+		        sf::Vector2f impact = getRayImpact(enemyAbsPos, angleToPlayer, maze, tileWidth);
+		        
+		        sf::Vector2f impactDiff = impact - enemyAbsPos;
+		        float distSqToImpact = impactDiff.x * impactDiff.x + impactDiff.y * impactDiff.y;
+		        return distSqToImpact >= (distSqToPlayer - 0.5f); 	//la marge sert à éviter les bugs de collision
+		    }
+
+    return false;
+}
 
 		void setScreenPosition(sf::Vector2f LabyMov){
 			character.setPosition(enemyAbsPos+ LabyMov);
@@ -317,6 +365,11 @@ class monster : public personnage {
 				std::cout<<"C'est Perdu !"<<std::endl;
 			}
 		}
-	
+		
+		void castASpell(std::vector<std::unique_ptr<Spell>>& Spells, Direction sens) {
+		    // On crée le sort et on l'ajoute directement à la liste du jeu
+		    // On utilise *this pour que le sort sache qui l'a lancé
+		    Spells.push_back(std::make_unique<Spell>(inScreenPos.x, inScreenPos.y, 1, sens, "RedFireBall", *this));
+}
 	};
 

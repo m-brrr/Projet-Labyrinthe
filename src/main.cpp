@@ -10,8 +10,8 @@
 int main() {
 	sf::RenderWindow window(sf::VideoMode(800,600), "Labyrinthe");
     StateMachine machine;
-    machine.addState(StatesNames::GameOver, std::make_unique<EndState>(machine, window));
-	machine.setCurrentState(StatesNames::GameOver);
+    machine.addState(StatesNames::Menu, std::make_unique<MenuState>(machine, window));
+	machine.setCurrentState(StatesNames::Menu);
 
 	sf::Clock gameClock;
 

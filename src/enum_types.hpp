@@ -30,6 +30,17 @@ inline int convertToNumberSpell (Direction maDirection){
 	return -1;
 }
 
+inline Direction determinerDirection(float diffX, float diffY) {
+	if (abs(diffY)>=abs(diffX)){
+		if (diffY>=0) return Direction::Down;
+		else  return Direction::Up;
+	}
+	else {
+		if (diffX>=0) return Direction::Right;
+		else return Direction::Left;
+	}
+}
+
 enum class EnemyState {
 	Patrol,
 	Chase,
@@ -38,4 +49,8 @@ enum class EnemyState {
 
 enum class StatesNames {
 	Menu, Game, GameOver, Pause
+};
+
+enum class SoundEffectNames {
+	BruitPas, BruitLancerSort, BruitExplosionSort, BruitSouffle, BruitMortEnemi
 };

@@ -11,6 +11,7 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   src/game_over.hpp \
   src/labyrinthe.hpp \
   src/page_menu.hpp \
+  src/page_pause.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
   src/terrain.hpp \
@@ -1054,6 +1055,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   src/game_over.hpp \
   src/labyrinthe.hpp \
   src/page_menu.hpp \
+  src/page_pause.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
   src/terrain.hpp \
@@ -1554,6 +1556,8 @@ src/labyrinthe.cpp:
 
 /usr/include/endian.h:
 
+/usr/include/ctype.h:
+
 /usr/include/c++/13/bits/invoke.h:
 
 /usr/include/c++/13/bits/functional_hash.h:
@@ -1686,20 +1690,6 @@ src/labyrinthe.cpp:
 
 /usr/include/SFML/System/ThreadLocal.hpp:
 
-/usr/include/SFML/Graphics/Rect.inl:
-
-/usr/include/c++/13/cmath:
-
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
-/usr/include/c++/13/bits/algorithmfwd.h:
-
-/usr/include/SFML/Window/Keyboard.hpp:
-
-/usr/include/c++/13/bits/ios_base.h:
-
-/usr/include/c++/13/iterator:
-
 /usr/include/c++/13/bits/allocator.h:
 
 /usr/include/c++/13/bits/stl_bvector.h:
@@ -1812,6 +1802,20 @@ src/terrain.hpp:
 
 /usr/include/SFML/System/InputStream.hpp:
 
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
+
+/usr/include/c++/13/bits/algorithmfwd.h:
+
+/usr/include/SFML/Window/Keyboard.hpp:
+
+/usr/include/c++/13/bits/ios_base.h:
+
+/usr/include/c++/13/iterator:
+
+/usr/include/SFML/Graphics/Rect.inl:
+
+/usr/include/c++/13/cmath:
+
 /usr/include/SFML/Graphics/Color.hpp:
 
 /usr/include/SFML/System.hpp:
@@ -1855,6 +1859,10 @@ src/sorts.hpp:
 /usr/include/SFML/System/String.hpp:
 
 /usr/include/SFML/System/MemoryInputStream.hpp:
+
+/usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/c++/13/cwchar:
 
 /usr/include/SFML/Graphics/RenderStates.hpp:
 
@@ -1929,6 +1937,8 @@ src/personnage.hpp:
 /usr/include/c++/13/bits/locale_facets.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
+
+src/page_pause.hpp:
 
 /usr/include/c++/13/bits/requires_hosted.h:
 
@@ -2060,10 +2070,6 @@ src/fonctions_generales.cpp:
 
 /usr/include/c++/13/cstdlib:
 
-/usr/include/x86_64-linux-gnu/sys/select.h:
-
-/usr/include/c++/13/cwchar:
-
 /usr/include/c++/13/cwctype:
 
 /usr/include/c++/13/ratio:
@@ -2153,5 +2159,3 @@ src/page_menu.hpp:
 /usr/include/c++/13/bits/nested_exception.h:
 
 /usr/include/c++/13/tuple:
-
-/usr/include/ctype.h:

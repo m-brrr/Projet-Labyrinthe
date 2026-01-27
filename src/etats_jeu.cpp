@@ -19,16 +19,18 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 								Direction maDirection=monPerso.get_orientation();
 								std::string typeDeSpell=monPerso.getSpellType();
 								int Level=monPerso.getLevel();
-								spells.push_back(std::make_unique<Spell>(0,0, Level, maDirection, typeDeSpell, monPerso, sf::Vector2f(400,300)));	//On rajoute le sort à la liste des choses à afficher
+								spells.push_back(std::make_unique<Spell>(400,300, Level, maDirection, typeDeSpell, monPerso));	//On rajoute le sort à la liste des choses à afficher
 							}
 						}
-					/*
+					
 					//pour l'interruption du jeu
 						if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 						{
-							machine.setState(std::make_unique<BreakState>(machine, window));	//on passe par un unique ptr pour éviter les problèmes de mémoire
+							std::cout<<"Mise en Pause"<<std::endl;
+							machine.addState(StatesNames::Pause, std::move(std::make_unique<BreakState>(machine, window)));
+                			machine.changeStateRequest(StatesNames::Pause);
 						}
-							*/
+							
 					}
 	    		}
 			}
@@ -83,7 +85,7 @@ void GameState::update(float dt)  {
 						
 					//Mise à jour des enemis
 						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
-							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt);
+							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt, spells, theMap);
 							
 							++it; // Passe au monstre suivant
 						}
@@ -127,6 +129,11 @@ void GameState::update(float dt)  {
 						    }
 						}
 						//mettre à jour la vue (ie le rayCasting)
+						if (monPerso.getHealthPoints()<=0){
+							std::cout<<"You Lost"<<std::endl;
+							machine.addState(StatesNames::GameOver, std::move(std::make_unique<EndState>(machine, window)));
+                			machine.changeStateRequest(StatesNames::GameOver);
+						}
 						myView.update(grilleLaby.get_grille(),playerPos, 150);
 						myView.setPosition(mapPos);	
 }
@@ -152,9 +159,8 @@ void GameState::render() {		//méthode pour tout afficher
 			for (const auto& pspell : spells) {  // 'spellPtr' est un std::unique_ptr<Spell>
     					pspell->afficherSort(window);            // Utilise '->' pour appeler la méthode
 						}
-						
-			maBarre.afficherBarreDeVie(window);
-
+			
+			monPerso.afficher_barreVie(window);
 			window.display();
 		}
 
@@ -225,5 +231,38 @@ void MenuState::update(float dt) {
 void MenuState::render() {
 	window.clear();
 	menu.afficherTitre(window);
+	window.display();
+}
+
+
+void BreakState::handleEvent() {
+	sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) window.close();
+
+        // Interaction avec les boutons
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (pause.PlayIsPressed(mousePos)) {
+                machine.changeStateRequest(StatesNames::Game);
+            }
+            if (pause.MenuIsPressed(mousePos)) {
+                machine.changeStateRequest(StatesNames::Menu);
+            }
+			if (pause.SettingsIsPressed(mousePos)) {
+                // machine.changeState(new MenuState(machine, fenetre));
+            }
+        }
+    }
+}	
+
+void BreakState::update(float dt) {
+	sf::Vector2i posSouris = sf::Mouse::getPosition(window);
+    pause.update(dt, posSouris);
+}
+
+void BreakState::render() {
+	window.clear();
+	pause.afficherTitre(window);
 	window.display();
 }

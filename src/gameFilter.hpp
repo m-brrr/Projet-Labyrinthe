@@ -14,6 +14,7 @@ class BarreDeVie {
 		sf::Sprite spriteBarre;
 		sf::RectangleShape square;
 		int life; //En % de la vie totale
+		float initialSquareWidth; //taille carré initiale
 
 	public : 
 		BarreDeVie() : healthPoints(100), life(100){
@@ -37,22 +38,26 @@ class BarreDeVie {
 		}
 
 		void setPercentage(float percentage){	//vie restante en pourcentage de ta vie maximale
-			square.setScale(percentage, 1);
+			sf::Vector2f currentSize = square.getSize();
+        	square.setSize(sf::Vector2f(initialSquareWidth * percentage, currentSize.y));
 		}
 };
 
 class PlayerBarreDeVie : public BarreDeVie {
 	public :
 		PlayerBarreDeVie() : BarreDeVie() {
+
 			spriteBarre.setOrigin(spriteBarre.getLocalBounds().width/2, spriteBarre.getLocalBounds().height/2);
 			spriteBarre.setPosition(400.f,550.f);
+
 			float scaleX = 4*spriteBarre.getLocalBounds().width;
 			float scaleY = 1.5*spriteBarre.getLocalBounds().height;
 			spriteBarre.setScale(4.f, 1.5);
-			
+
 			float recWidth=spriteBarre.getGlobalBounds().width-40.f;
-			float recHeight=spriteBarre.getGlobalBounds().height-10.f;
+			float recHeight=spriteBarre.getGlobalBounds().height-8.f;
 			square.setSize(sf::Vector2f(recWidth,recHeight));
+			initialSquareWidth=recWidth;
 
 			square.setOrigin(0.f, square.getLocalBounds().height/ 2.f);
 			float rectX = spriteBarre.getPosition().x - (spriteBarre.getGlobalBounds().width / 2.f) + 20.f;
@@ -83,7 +88,7 @@ class EnemyBarreDeVie : public BarreDeVie {
 			float internalWidth = b.width - (paddingX * 2.f);
 			float internalHeight = b.height - (paddingY * 2.f);
 			square.setSize(sf::Vector2f(internalWidth, internalHeight));
-
+			initialSquareWidth=internalWidth;
 			
 			square.setOrigin(0.f, internalHeight / 2.f);
 			float rectX = spriteBarre.getPosition().x - (b.width / 2.f) + paddingX;
