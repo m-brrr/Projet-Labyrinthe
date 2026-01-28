@@ -30,6 +30,16 @@ inline int convertToNumberSpell (Direction maDirection){
 	return -1;
 }
 
+inline sf::Vector2f getNewPosition(float dt,sf::Vector2f formerAbsPosition, float speed, Direction maDirection){	//prend une position absolue et renvoie la nouvelle position absolue
+			switch (maDirection){
+				case Direction::Right : return formerAbsPosition+(sf::Vector2f(speed*dt, 0));
+				case Direction::Left : return formerAbsPosition+(sf::Vector2f(-speed*dt, 0)); 
+				case Direction::Up : return formerAbsPosition+(sf::Vector2f(0, -speed*dt)); 
+				case Direction::Down : return formerAbsPosition+(sf::Vector2f(0, +speed*dt));
+			}
+			throw std::runtime_error("Direction invalide");
+		}
+
 inline Direction determinerDirection(float diffX, float diffY) {
 	if (abs(diffY)>=abs(diffX)){
 		if (diffY>=0) return Direction::Down;
@@ -48,7 +58,7 @@ enum class EnemyState {
 };
 
 enum class StatesNames {
-	Menu, Game, GameOver, Pause
+	Menu, Game, GameOver, Pause, HappyEnd
 };
 
 enum class SoundEffectNames {

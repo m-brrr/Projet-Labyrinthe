@@ -12,6 +12,8 @@
 #include "terrain.hpp"
 #include "gestion_son.hpp"
 
+sf::Vector2f getRayImpact(sf::Vector2f playerPos, float angle, const std::vector<std::vector<int>>& maze, int tileWidth);
+
 class personnage {
 	protected :
 		
@@ -27,11 +29,11 @@ class personnage {
 		float HealthMax=1000;
 		float HealthPoint = 1000;
 		int Level=1;
-		float animationDelay =0.1f;
+		float animationDelay=0.1;
 
 		sf::Clock animation_clock;	//chaque personnage a sa propre horloge pour ses animations
 		sf::Clock attack_clock;
-		float attackDelay=0.3f;
+		float attackDelay;
 		float lastFootstepFrame=-1; //dernière frame avant 
 		int soundVolume;
 		int damageDisplay;	//sert à l'effet de rouge lorsque le perso prend un dégat
@@ -91,6 +93,10 @@ class personnage {
 		bool isAlive () {
 			return HealthPoint>0;
 		}
+		
+		sf::Sprite& getSprite(){
+			return character;
+		}
 		//Méthodes utiles (non const)
 
 		bool canAttack()
@@ -143,7 +149,7 @@ class personnage {
 		bool getHealthPoints(){
 			return HealthPoint;
 		}
-};
+	};
 
 
 
@@ -157,6 +163,7 @@ class playerPerso : public personnage {
 		playerPerso(Direction o, std::string perso_choisi) : personnage(o,perso_choisi), maBarreDeVie() {
 			character.setPosition(400.f,300.f);
 			soundVolume=20.f;
+			attackDelay=0.1f;
 		}
 
 		void take_damage(int spellLevel) override {
@@ -181,7 +188,8 @@ class playerPerso : public personnage {
 		void afficher_barreVie(sf::RenderWindow &window){
 			maBarreDeVie.afficherBarreDeVie(window);
 		}
-};
+
+	};
 
 
 class monster : public personnage {
@@ -198,6 +206,7 @@ class monster : public personnage {
 			character.setPosition(enemyAbsPos);
 			theState=EnemyState::Patrol;
 			soundVolume=0;
+			attackDelay=0.5f;
 		}
 
 		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt, std::vector<std::unique_ptr<Spell>>& Spells,  Map &theMap, Son& regieSon){
@@ -238,15 +247,16 @@ class monster : public personnage {
 		void updatePatrol(float dt, float tileWidth, sf::Vector2f playerPos,  Map &theMap){
 			sf::Vector2f posInGrid = sf::Vector2f(static_cast<int>(enemyAbsPos.x/tileWidth), static_cast<int>(enemyAbsPos.y/tileWidth));
 			float distToSide=tileWidth/6;
+			
 			if ((enemyAbsPos.x-(posInGrid.x*tileWidth)>distToSide) && transitionState==1){
 				setDirection(Direction::Left);
-				//if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(-dt*speed,0.f),150.f)){
-				enemyAbsPos+=sf::Vector2f(-dt*speed,0.f);
+				if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(-dt*speed,0.f),150.f)){
+				enemyAbsPos+=sf::Vector2f(-dt*speed,0.f);}
 			}
 			else if ((enemyAbsPos.y-(posInGrid.y*tileWidth))>distToSide && transitionState==1){
 				setDirection(Direction::Up);
-				//if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(-dt*speed,0.f),150.f)){
-				enemyAbsPos+=sf::Vector2f(0.f, -dt*speed);
+				if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(0.f, -dt*speed),150.f)){
+				enemyAbsPos+=sf::Vector2f(0.f, -dt*speed);}
 			}
 			else {
 				transitionState=0;
@@ -303,19 +313,22 @@ class monster : public personnage {
 		            maDirection = (diff.x > 0) ? Direction::Right : Direction::Left;
 		            // On s'assure de ne pas dépasser la cible (clamp)
 		            float step = std::min(moveStep, std::abs(diff.x));
-		            enemyAbsPos.x += (diff.x > 0 ? 1 : -1) * step;
+					float moveX=(diff.x > 0 ? 1 : -1) * step;
+					if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(moveX,0.f),150.f))enemyAbsPos.x += moveX;
+		            
 		        } 
 		        else {
 		            maDirection = (diff.y > 0) ? Direction::Down : Direction::Up;
 		            float step = std::min(moveStep, std::abs(diff.y));
-		            enemyAbsPos.y += (diff.y > 0 ? 1 : -1) * step;
+					float moveY=(diff.y > 0 ? 1 : -1) * step;
+					if (theMap.canMove(character,enemyAbsPos+sf::Vector2f(0.f,moveY),150.f))enemyAbsPos.y += moveY;
 		        }
 		    } 
 		    // si on est aligné
 		    else {
 		        maDirection = determinerDirection(diff.x, diff.y);
 		        if (canAttack()) {
-		            castASpell(Spells, maDirection);
+		            castASpell(Spells, maDirection, theMap);
 		        }
 		    }
 		}
@@ -377,10 +390,10 @@ class monster : public personnage {
 			}
 		}
 		
-		void castASpell(std::vector<std::unique_ptr<Spell>>& Spells, Direction sens) {
+		void castASpell(std::vector<std::unique_ptr<Spell>>& Spells, Direction sens, Map& theMap) {
 		    // On crée le sort et on l'ajoute directement à la liste du jeu
 		    // On utilise *this pour que le sort sache qui l'a lancé
-		    Spells.push_back(std::make_unique<Spell>(inScreenPos.x, inScreenPos.y, 1, sens, "RedFireBall", *this));
+		    Spells.push_back(std::make_unique<Spell>(inScreenPos.x, inScreenPos.y, 1, sens, "RedFireBall", *this,theMap.getPosition()));
 }
 	};
 

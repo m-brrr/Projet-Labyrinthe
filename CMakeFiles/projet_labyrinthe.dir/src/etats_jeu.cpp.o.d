@@ -313,4 +313,5 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/game_over.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/boutons.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_menu.hpp \
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/victoire.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_pause.hpp

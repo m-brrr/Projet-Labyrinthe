@@ -19,7 +19,7 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 								Direction maDirection=monPerso.get_orientation();
 								std::string typeDeSpell=monPerso.getSpellType();
 								int Level=monPerso.getLevel();
-								spells.push_back(std::make_unique<Spell>(400,300, Level, maDirection, typeDeSpell, monPerso));	//On rajoute le sort à la liste des choses à afficher
+								spells.push_back(std::make_unique<Spell>(400,300, Level, maDirection, typeDeSpell, monPerso, theMap.getPosition()));	//On rajoute le sort à la liste des choses à afficher
 							}
 						}
 					
@@ -38,9 +38,10 @@ void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (
 void GameState::update(float dt)  {
     				//Pour les déplacements : 
 					sf::Vector2f LabyMov=sf::Vector2f(0.f,0.f);
+					
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))	
-			            {
-							theMap.moveTheMap(dt, Direction::Left);
+			            {	
+							theMap.moveTheMap(dt, Direction::Left, 150.f);
 							LabyMov=theMap.getMov(dt, Direction::Left);
 
 							monPerso.setDirection(Direction::Left);
@@ -48,7 +49,7 @@ void GameState::update(float dt)  {
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			            {
-							theMap.moveTheMap(dt, Direction::Right);
+							theMap.moveTheMap( dt, Direction::Right, 150.f);
 							LabyMov=theMap.getMov(dt, Direction::Right);
 
 							monPerso.setDirection(Direction::Right);
@@ -56,7 +57,7 @@ void GameState::update(float dt)  {
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			            {
-							theMap.moveTheMap(dt, Direction::Up);
+							theMap.moveTheMap( dt, Direction::Up, 150.f);
 							LabyMov=theMap.getMov(dt, Direction::Up);
 
 							monPerso.setDirection(Direction::Up);
@@ -64,7 +65,7 @@ void GameState::update(float dt)  {
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			            {
-							theMap.moveTheMap(dt, Direction::Down);
+							theMap.moveTheMap (dt, Direction::Down, 150.f);
 							LabyMov=theMap.getMov(dt, Direction::Down);
 
 							monPerso.setDirection(Direction::Down);
@@ -82,6 +83,12 @@ void GameState::update(float dt)  {
 					//Mise à jour de la position du perso dans la map (absolue)
 						sf::Vector2f mapPos=theMap.getPosition();
 						sf::Vector2f playerPos= sf::Vector2f(400.f,300.f)-mapPos;
+
+					//On vérifie si le joueur a gagné 
+						if(theMap.didWin(H,L,150.f)) {
+							machine.addState(StatesNames::HappyEnd, std::move(std::make_unique<WinState>(machine, window, regieSon)));
+                			machine.changeStateRequest(StatesNames::HappyEnd);
+						}
 						
 					//Mise à jour des enemis
 						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
@@ -92,17 +99,22 @@ void GameState::update(float dt)  {
 
 					//Mise à jour des sorts
 						for (auto it = spells.begin(); it != spells.end(); ) {
-
-							(*it)->setPosition(dt, LabyMov);
-							(*it)->Spell_animateMov();
 							bool spellDestroyed = false;
+							//on met à jour la position du spell, sauf s'il rencontre un mur.
+							sf::Sprite* theSpellSprite=(*it)->getSprite();
+							//bool toucheMur=theMap.canMove(it,  )
+							if(!(*it)->setPosition(dt, theMap, 150.f)) spellDestroyed=true;
+							(*it)->Spell_animateMov();
+							
 
+							//on vérifie le spell touche le personnage
 						    if ((*it)->didTouchCharacter(monPerso.getBoundsCharacter(),monPerso)) {
 						        std::cout << "YESSS" << std::endl;
 						        monPerso.take_damage((*it)->getSpellLevel());
 						        spellDestroyed = true; // Supprime l'élément et met à jour l'itérateur
 						    } 
 
+							//on vérifie si le spell touche les enemis
 							if (!spellDestroyed) {
 						        for (auto& enemy : allEnemies) {
 						            if ((*it)->didTouchCharacter(enemy->getBoundsCharacter(),*enemy)) {
@@ -114,12 +126,12 @@ void GameState::update(float dt)  {
 						        }
 							}
 
-							if (spellDestroyed) {
-								it = spells.erase(it);
-							}
+							//si le spell est détruit, on l'efface de la mémoire
+							if (spellDestroyed) it = spells.erase(it);
 							else {it++;}
 						}
 						
+						//On vérifie si les enemis sont morts :
 						for (auto enemyIt = allEnemies.begin(); enemyIt != allEnemies.end(); ) {
 						    if (!(*enemyIt)->isAlive()) {
 						        std::cout << "Un ennemi vient de mourir !" << std::endl;
@@ -128,16 +140,18 @@ void GameState::update(float dt)  {
 						        ++enemyIt;
 						    }
 						}
-						//mettre à jour la vue (ie le rayCasting)
+						
+						//on verifie si le perso est mort :
 						if (monPerso.getHealthPoints()<=0){
 							std::cout<<"You Lost"<<std::endl;
-							machine.addState(StatesNames::GameOver, std::move(std::make_unique<EndState>(machine, window, regieSon)));
+							machine.addState(StatesNames::GameOver, std::move(std::make_unique<LooseState>(machine, window, regieSon)));
                 			machine.changeStateRequest(StatesNames::GameOver);
 						}
+
+						//on update le rayCasting avant affichage
 						myView.update(grilleLaby.get_grille(),playerPos, 150);
 						myView.setPosition(mapPos);	
 }
-
 
 void GameState::render() {		//méthode pour tout afficher
 
@@ -146,7 +160,9 @@ void GameState::render() {		//méthode pour tout afficher
 			lightmap.display();
 
 			window.clear();
+			
 			window.draw(theMap);
+			theMap.afficher_porte(window);
 
 			monPerso.afficher_perso(window);
 			for (const auto& pmonster : allEnemies){
@@ -164,11 +180,41 @@ void GameState::render() {		//méthode pour tout afficher
 			window.display();
 		}
 
+void GameState::generer_enemis(float tileWidth) {
+    std::vector<sf::Vector2i> emptyTiles;
+	std::vector<std::vector<int>> maze=grilleLaby.get_grille();
+    //Lister toutes les cases avec des 0 (libres)
+    for (int j = 0; j < maze.size(); ++j) {
+        for (int i = 0; i < maze[j].size(); ++i) {
+            if (maze[j][i] == 0) { 
+                emptyTiles.push_back(sf::Vector2i(i, j));
+            }
+        }
+    }
 
+    // 2. Générer les ennemis
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    
+    for (int i = 0; i < nbEnemis && !emptyTiles.empty(); ++i) {
+        std::uniform_int_distribution<> dis(0, emptyTiles.size() - 1);
+        int index = dis(gen);
+        sf::Vector2i tile = emptyTiles[index];
+
+        // Calcul de la position absolue (centrée dans la tuile)
+        float posX = tile.x * tileWidth + tileWidth / 2.f;
+        float posY = tile.y * tileWidth + tileWidth / 2.f;
+
+        // on cree l'ennemi 
+         allEnemies.push_back(std::make_unique<monster>(Direction::Up, "Aguy", sf::Vector2f(posX,posY)));
+
+        // on retire la case pour ne pas spawner deux ennemis au même endroit
+        emptyTiles.erase(emptyTiles.begin() + index);
+    }
+}
 		//Page de Fin de Jeu
-		
 
-void EndState::handleEvent() {
+void LooseState::handleEvent() {
 	sf::Event event;
     while (window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) window.close();
@@ -190,12 +236,12 @@ void EndState::handleEvent() {
     }
 }	
 
-void EndState::update(float dt) {
+void LooseState::update(float dt) {
 	sf::Vector2i posSouris = sf::Mouse::getPosition(window);
     titreFin.update(dt, posSouris);
 }
 
-void EndState::render() {
+void LooseState::render() {
 	window.clear();
 	titreFin.afficherTitre(window);
 	window.display();
@@ -238,6 +284,7 @@ void MenuState::render() {
 	window.display();
 }
 
+		//Page de mise en pause
 
 void BreakState::handleEvent() {
 	sf::Event event;
@@ -271,7 +318,45 @@ void BreakState::update(float dt) {
 }
 
 void BreakState::render() {
+
 	window.clear();
 	pause.afficherTitre(window);
+	window.display();
+}
+
+//Page Victoire :
+
+//Page de Fin de Jeu
+
+void WinState::handleEvent() {
+	sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) window.close();
+
+        // Interaction avec les boutons
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (victoire.RetryIsPressed(mousePos)) {
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+				machine.addState(StatesNames::Game, std::move(std::make_unique<GameState>(machine, window, regieSon)));
+                machine.changeStateRequest(StatesNames::Game);
+            }
+            if (victoire.MenuIsPressed(mousePos)) {
+				regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+                machine.addState(StatesNames::Menu, std::move(std::make_unique<MenuState>(machine, window, regieSon)));
+                machine.changeStateRequest(StatesNames::Menu);
+            }
+        }
+    }
+}	
+
+void WinState::update(float dt) {
+	sf::Vector2i posSouris = sf::Mouse::getPosition(window);
+    victoire.update(dt, posSouris);
+}
+
+void WinState::render() {
+	window.clear();
+	victoire.afficherTitre(window);
 	window.display();
 }

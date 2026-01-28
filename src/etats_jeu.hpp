@@ -14,9 +14,11 @@
 #include "RayTracing.hpp"
 #include "game_over.hpp"
 #include "page_menu.hpp"
+#include "victoire.hpp"
 #include "page_pause.hpp"
 #include "sorts.hpp"
 #include "gestion_son.hpp"
+#include "fonctions_generales.hpp"
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -53,33 +55,33 @@ class GameState : public State {
 		
 		std::vector<std::unique_ptr<Spell>> spells;
 		std::vector<std::unique_ptr<monster>> allEnemies;
-
+		int nbEnemis=0;
 		sf::RenderTexture lightmap;
 		sf::Sprite lightSprite;
 		WhatUSee myView;
-	
+
 		
 	public :
 
 	//Constructeur :
 		GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon) : 
-			State(machine,fenetre,leSon), 
-			monPerso(playerPerso(Direction::Up, "Child")),
-			grilleLaby(H, L),
-			myView(),
-			theMap(grilleLaby.get_grille())
-				{
-				std::cout<<"generation du monde en cours..."<<std::endl;
-				grilleLaby.afficher();	//on l'affiche dans la console	
-
-				theMap.load( sf::Vector2u(150,150), grilleLaby.get_grille(),L,H);
-				std::cout<<"AAAAAA"<<std::endl;
-				grilleLaby.afficher();	//on l'affiche dans la console	
-				lightmap.create(800,600);
-				allEnemies.push_back(std::make_unique<monster>(Direction::Up, "Aguy", sf::Vector2f(200.f,200.f)));
-				}
+		    State(machine, fenetre, leSon), 
+		    monPerso(Direction::Up, "Child"), // Correction de la syntaxe d'initialisation
+		    grilleLaby(H, L),
+		    theMap(grilleLaby.get_grille()),
+		    myView() // Pas de virgule ici
+		{ // Début du corps du constructeur
+		    std::cout << "generation du monde en cours..." << std::endl;
+		    
+		    theMap.load(sf::Vector2u(150, 150), grilleLaby.get_grille(), L, H);
+		    lightmap.create(800, 600);
+		    
+		    // On peut maintenant appeler la fonction car allEnemies est prêt
+		    generer_enemis(150.f);
+		}
 
 	//Méthodes : 
+		void generer_enemis(float tileWidth);
 		void handleEvent() override;
 		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
 		void render() override;
@@ -87,12 +89,12 @@ class GameState : public State {
 
 
 
-class EndState : public State{
+class LooseState : public State{
 	private :
 		affichage_fin titreFin;
 		
 	public :
-		EndState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon):  State(machine, fenetre, leSon),titreFin()
+		LooseState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon):  State(machine, fenetre, leSon),titreFin()
 			{
 			std::cout<<"generation page de fin de jeu en cours..."<<std::endl;
 			}
@@ -136,6 +138,22 @@ class BreakState : public State {
 		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
 		void render() override;
 };
+
+class WinState : public State{
+	private :
+		affichage_victoire victoire;
+		
+	public :
+		WinState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon):  State(machine, fenetre, leSon),victoire()
+			{
+			std::cout<<"generation page de victoire en cours..."<<std::endl;
+			}
+
+		void handleEvent() override;
+		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
+		void render() override;
+};
+
 
 /*
 class ChooseCharacterState : public State {

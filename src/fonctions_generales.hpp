@@ -6,8 +6,11 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <random>
 
 #include "enum_types.hpp"
 
 
+
 sf::Vector2f getRayImpact(sf::Vector2f playerPos, float angle, const std::vector<std::vector<int>>& maze, int tileWidth);
+
