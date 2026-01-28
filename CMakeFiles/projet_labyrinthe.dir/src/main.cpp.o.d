@@ -316,4 +316,6 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_menu.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/victoire.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_pause.hpp \
- /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/Settings.hpp
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/Settings.hpp \
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_personnage.hpp \
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/stateMachine.hpp

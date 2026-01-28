@@ -4,6 +4,7 @@
 #include "etats_jeu.hpp"
 #include "terrain.hpp"
 #include "personnage.hpp"
+#include "stateMachine.hpp"
 #include "enum_types.hpp"
 #include "gestion_son.hpp"
 

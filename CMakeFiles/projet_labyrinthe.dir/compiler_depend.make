@@ -14,8 +14,10 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   src/labyrinthe.hpp \
   src/page_menu.hpp \
   src/page_pause.hpp \
+  src/page_personnage.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
+  src/stateMachine.hpp \
   src/terrain.hpp \
   src/victoire.hpp \
   /usr/include/SFML/Audio.hpp \
@@ -1093,8 +1095,10 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   src/labyrinthe.hpp \
   src/page_menu.hpp \
   src/page_pause.hpp \
+  src/page_personnage.hpp \
   src/personnage.hpp \
   src/sorts.hpp \
+  src/stateMachine.hpp \
   src/terrain.hpp \
   src/victoire.hpp \
   /usr/include/SFML/Audio.hpp \
@@ -1620,8 +1624,6 @@ src/labyrinthe.cpp:
 
 /usr/include/c++/13/tr1/special_function_util.h:
 
-/usr/include/c++/13/tr1/poly_laguerre.tcc:
-
 /usr/include/c++/13/tr1/poly_hermite.tcc:
 
 /usr/include/c++/13/tr1/modified_bessel_func.tcc:
@@ -1640,11 +1642,7 @@ src/labyrinthe.cpp:
 
 /usr/include/c++/13/pstl/pstl_config.h:
 
-/usr/include/c++/13/bits/basic_ios.tcc:
-
-/usr/include/c++/13/pstl/execution_defs.h:
-
-/usr/include/c++/13/bits/basic_ios.h:
+/usr/include/c++/13/pstl/glue_numeric_defs.h:
 
 /usr/include/c++/13/bits/atomic_lockfree_defines.h:
 
@@ -1778,6 +1776,14 @@ src/personnage.hpp:
 
 /usr/include/c++/13/limits:
 
+/usr/include/c++/13/algorithm:
+
+/usr/include/SFML/Graphics/Sprite.hpp:
+
+/usr/include/SFML/Graphics/Export.hpp:
+
+/usr/include/c++/13/ext/aligned_buffer.h:
+
 /usr/include/stdio.h:
 
 /usr/include/c++/13/bits/stl_iterator_base_types.h:
@@ -1804,15 +1810,29 @@ src/etats_jeu.hpp:
 
 /usr/include/SFML/Graphics/CircleShape.hpp:
 
-/usr/include/SFML/Graphics/Shape.hpp:
+/usr/include/c++/13/tr1/poly_laguerre.tcc:
+
+src/stateMachine.hpp:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/SFML/Window/WindowHandle.hpp:
+
+src/enum_types.hpp:
+
+/usr/include/SFML/Graphics/Image.hpp:
 
 src/victoire.hpp:
 
-/usr/include/SFML/Audio/Listener.hpp:
+/usr/include/SFML/Graphics/Shape.hpp:
 
-src/etats_jeu.cpp:
+/usr/include/SFML/Window/Event.hpp:
 
-/usr/include/SFML/Audio/AlResource.hpp:
+/usr/include/SFML/System/String.inl:
+
+/usr/include/c++/13/bits/stl_stack.h:
+
+/usr/include/c++/13/bits/stringfwd.h:
 
 /usr/include/SFML/System/Lock.hpp:
 
@@ -1820,23 +1840,13 @@ src/etats_jeu.cpp:
 
 /usr/include/c++/13/backward/binders.h:
 
-/usr/include/SFML/Graphics/Export.hpp:
-
-/usr/include/SFML/Graphics/Sprite.hpp:
-
-/usr/include/c++/13/ext/aligned_buffer.h:
-
 src/boutons.hpp:
-
-src/fonctions_generales.hpp:
-
-src/gameFilter.hpp:
-
-/usr/include/SFML/Window/Window.hpp:
 
 src/terrain.hpp:
 
 /usr/include/SFML/System/Utf.hpp:
+
+/usr/include/SFML/Audio/Listener.hpp:
 
 src/game_over.hpp:
 
@@ -1851,14 +1861,6 @@ src/game_over.hpp:
 /usr/include/SFML/Audio/SoundSource.hpp:
 
 /usr/include/c++/13/format:
-
-/usr/include/c++/13/bits/allocator.h:
-
-/usr/include/SFML/Window/WindowHandle.hpp:
-
-src/enum_types.hpp:
-
-/usr/include/SFML/Graphics/Image.hpp:
 
 /usr/include/SFML/Window/WindowBase.hpp:
 
@@ -1887,6 +1889,16 @@ src/labyrinthe.hpp:
 /usr/include/SFML/Graphics/Rect.inl:
 
 /usr/include/c++/13/cmath:
+
+src/fonctions_generales.hpp:
+
+src/gameFilter.hpp:
+
+/usr/include/SFML/Window/Window.hpp:
+
+src/etats_jeu.cpp:
+
+/usr/include/SFML/Audio/AlResource.hpp:
 
 /usr/include/c++/13/typeinfo:
 
@@ -1978,6 +1990,8 @@ src/RayTracing.hpp:
 
 /usr/include/c++/13/cerrno:
 
+src/page_personnage.hpp:
+
 /usr/include/SFML/Window/Vulkan.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/gthr-default.h:
@@ -2026,7 +2040,11 @@ src/RayTracing.hpp:
 
 /usr/include/c++/13/bits/move.h:
 
-/usr/include/c++/13/algorithm:
+/usr/include/c++/13/bits/basic_ios.h:
+
+/usr/include/c++/13/bits/basic_ios.tcc:
+
+/usr/include/c++/13/pstl/execution_defs.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
@@ -2073,6 +2091,12 @@ src/RayTracing.hpp:
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/include/c++/13/bits/locale_classes.h:
+
+/usr/include/c++/13/bits/uniform_int_dist.h:
+
+/usr/include/SFML/Graphics/Glsl.inl:
+
+/usr/include/c++/13/bits/locale_classes.tcc:
 
 /usr/include/c++/13/bits/istream.tcc:
 
@@ -2194,20 +2218,6 @@ src/Settings.hpp:
 
 /usr/include/c++/13/bits/stl_set.h:
 
-/usr/include/SFML/Window/Event.hpp:
-
-/usr/include/SFML/System/String.inl:
-
-/usr/include/c++/13/bits/stl_stack.h:
-
-/usr/include/c++/13/bits/stringfwd.h:
-
-/usr/include/SFML/Graphics/Glsl.inl:
-
-/usr/include/c++/13/bits/locale_classes.tcc:
-
-/usr/include/c++/13/bits/uniform_int_dist.h:
-
 /usr/include/c++/13/bits/stl_tempbuf.h:
 
 /usr/include/c++/13/bits/stream_iterator.h:
@@ -2273,5 +2283,3 @@ src/page_menu.hpp:
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 
 /usr/include/c++/13/numeric:
-
-/usr/include/c++/13/pstl/glue_numeric_defs.h:

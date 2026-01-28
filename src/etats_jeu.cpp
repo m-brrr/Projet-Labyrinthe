@@ -1,6 +1,24 @@
 #include "etats_jeu.hpp"
+#include "stateMachine.hpp"
 
 		//Page de Jeu
+GameState::GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon) : 
+		    State(machine, fenetre, leSon), 
+			persoChoisi(machine.getPersoName()),
+		    monPerso(Direction::Up, persoChoisi), 
+		    grilleLaby(H, L),
+		    theMap(grilleLaby.get_grille()),
+		    myView() // Pas de virgule ici
+
+		{ // Début du corps du constructeur
+		    std::cout << "generation du monde en cours..." << std::endl;
+		    
+		    theMap.load(sf::Vector2u(150, 150), grilleLaby.get_grille(), L, H);
+		    lightmap.create(800, 600);
+		    myView.initializeExitLight(grilleLaby.get_grille(), sf::Vector2f ((L - 1) * 150.f, (H - 1) * 150.f), 150.f);
+		    // On peut maintenant appeler la fonction car allEnemies est prêt
+		    generer_enemis(150.f);
+		}
 
 void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (à chaque Frame, c'est juste un parcourt rapide du buffer des évenemengts)
 			 sf::Event event;
@@ -265,7 +283,9 @@ void MenuState::handleEvent() {
 				regieSon.playMusic(MusicNames::MusicGame);
             }
             if (menu.CharacterIsPressed(mousePos)) {
-                // machine.changeState(new MenuState(machine, fenetre));
+                regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+				machine.addState(StatesNames::Character, std::move(std::make_unique<CharacterState>(machine, window, regieSon)));
+                machine.changeStateRequest(StatesNames::Character);
             }
 			if (menu.SettingsIsPressed(mousePos)) {
                 regieSon.jouerSon(SoundEffectNames::Click, 100.f);
@@ -363,6 +383,13 @@ void WinState::render() {
 }
 
 //Page settings :
+SettingsState::SettingsState(StateMachine& machine, sf::RenderWindow& window, Son& leSon) 
+        : State(machine, window, leSon) {
+        // Init visuelle avec les valeurs actuelles
+        affichagereglages.updateVolumeSFXVisual(regieSon.getSFXVolume());
+		affichagereglages.updateVolumeMusicVisual(regieSon.getMusicVolume());
+        affichagereglages.updateDifficultyVisual(difficultéInterne);
+    }
 
 void SettingsState::handleEvent()  {
         sf::Event event;
@@ -407,3 +434,44 @@ void SettingsState::render() {
         affichagereglages.dessiner(window);
         window.display();
     }
+
+// Page Character 
+CharacterState::CharacterState(StateMachine& machine, sf::RenderWindow& window, Son& leSon) 
+        : State(machine, window, leSon) {
+        // Init visuelle avec les valeurs actuelles
+        Affichagepersonnage.updateChoiceVisual(choixInitial);
+    }
+
+void CharacterState::handleEvent()  {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) window.close();
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2f mPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                // choix Perso
+                for (int i = 0; i < 4; ++i) {
+                    if (Affichagepersonnage.getDiffBounds(i).contains(mPos)) {
+                        choixInitial = i;
+						machine.setPersoName(Affichagepersonnage.getCharacterChosen(i));
+                        Affichagepersonnage.updateChoiceVisual(i);
+                        regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+                    }
+                }
+
+                // Retour
+                if (Affichagepersonnage.getBackBounds().contains(mPos)) {
+                    machine.changeStateRequest(StatesNames::Menu);
+                }
+            }
+        }
+    }
+
+void CharacterState::render() {
+        window.clear();
+        Affichagepersonnage.dessiner(window);
+        window.display();
+    }
+
+	

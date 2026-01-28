@@ -20,6 +20,7 @@
 #include "gestion_son.hpp"
 #include "fonctions_generales.hpp"
 #include "Settings.hpp"
+#include "page_personnage.hpp"
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -42,16 +43,16 @@ class State {
 		virtual void render()=0;	//Affiche l'état à l'écran (la fenêtre est membre donc pas besoin de la redefinir)
 };
 
-
 class GameState : public State {
 	private :
 		
 		const int H = 19; //dimensions du Labyrinthe
     	const int L = 31;
 
-    	grilleLabyrinthe grilleLaby; //La grille du labyrinthe (constituée de 0 et de 1)
+    	
 		Map theMap;		//Le labyrinthe réel (généré à partir de la grille)
-
+		grilleLabyrinthe grilleLaby; //La grille du labyrinthe (constituée de 0 et de 1)
+		std::string persoChoisi;
 		playerPerso monPerso;
 		
 		std::vector<std::unique_ptr<Spell>> spells;
@@ -65,21 +66,7 @@ class GameState : public State {
 	public :
 
 	//Constructeur :
-		GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon) : 
-		    State(machine, fenetre, leSon), 
-		    monPerso(Direction::Up, "Child"), // Correction de la syntaxe d'initialisation
-		    grilleLaby(H, L),
-		    theMap(grilleLaby.get_grille()),
-		    myView() // Pas de virgule ici
-		{ // Début du corps du constructeur
-		    std::cout << "generation du monde en cours..." << std::endl;
-		    
-		    theMap.load(sf::Vector2u(150, 150), grilleLaby.get_grille(), L, H);
-		    lightmap.create(800, 600);
-		    myView.initializeExitLight(grilleLaby.get_grille(), sf::Vector2f ((L - 1) * 150.f, (H - 1) * 150.f), 150.f);
-		    // On peut maintenant appeler la fonction car allEnemies est prêt
-		    generer_enemis(150.f);
-		}
+		GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon);
 
 	//Méthodes : 
 		void generer_enemis(float tileWidth);
@@ -87,8 +74,6 @@ class GameState : public State {
 		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
 		void render() override;
 };
-
-
 
 class LooseState : public State{
 	private :
@@ -105,8 +90,6 @@ class LooseState : public State{
 		void render() override;
 };
 
-
-
 class MenuState : public State {
 	private :
 		affichage_menu menu;
@@ -122,7 +105,6 @@ class MenuState : public State {
 		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
 		void render() override;
 };
-
 
 class BreakState : public State {
 	private :
@@ -161,13 +143,7 @@ private:
     int difficultéInterne = 1;
 
 public:
-    SettingsState(StateMachine& machine, sf::RenderWindow& window, Son& leSon) 
-        : State(machine, window, leSon) {
-        // Init visuelle avec les valeurs actuelles
-        affichagereglages.updateVolumeSFXVisual(regieSon.getSFXVolume());
-		affichagereglages.updateVolumeMusicVisual(regieSon.getMusicVolume());
-        affichagereglages.updateDifficultyVisual(difficultéInterne);
-    }
+    SettingsState(StateMachine& machine, sf::RenderWindow& window, Son& leSon);
 
     void handleEvent() override;
 
@@ -178,82 +154,20 @@ public:
     void render() override;
 };
 
-/*
-class ChooseCharacterState : public State {
-	public : 
-};
-
-void affichage_menu(sf::RenderWindow window) {
-	// Effacer la fenêtre
-        window.clear();
-	sf::Font font1;
-	font1.loadFromFile("../assets/they-perished/TheyPerished.ttf");
-	sf::Text Nom_Jeu ("Labyrinthe", font1);
-	Nom_Jeu.setCharacterSize(32);
-	window.draw(Nom_Jeu);
-}
-	*/
-
-class StateMachine {
+class CharacterState : public State {
 private:
-    // Utiliser une map permet d'accéder à l'état par son ID sans utiliser de chiffres (un peu comme un dictionnaire python)
-    std::map<StatesNames, std::unique_ptr<State>> states;
-    StatesNames currentState;
-	StatesNames newState;
-    bool hasCurrentState = false;
-	bool changeStateFlag = false;
-
+    AffichageCharacter Affichagepersonnage;
+    int choixInitial = 0;
 
 public:
-    // Ajoute ou remplace un état (move détruit automatiquement un état)
-    void addState(StatesNames id, std::unique_ptr<State> newState) {
-        states[id] = std::move(newState); 
+    CharacterState(StateMachine& machine, sf::RenderWindow& window, Son& leSon);
+
+    void handleEvent() override;
+
+    void update(float dt) override {
+        // Ici, on pourrait ajouter des animations fluides si besoin
     }
 
-    // Change l'état actif avec vérification de sécurité
-    void setCurrentState(StatesNames id) {
-            currentState = id;
-            hasCurrentState = true;
-    }
-
-    // Accesseur rapide pour l'état actuel
-    State* getCurrent() {
-        return hasCurrentState ? states[currentState].get() : nullptr;
-    }
-    
-    void handleEvent() {
-        if (auto* state = getCurrent()) {
-            state->handleEvent();
-        }
-    }
-
-    void update(float dt) {
-        if (auto* state = getCurrent()) {
-            state->update(dt);
-        }
-    }
-
-    void render() {
-        if (auto* state = getCurrent()) {
-            state->render();
-        }
-    }
-
-    // Supprimer un état pour libérer de la mémoire
-    void removeState(StatesNames id) {
-        states.erase(id);
-        if (currentState == id) hasCurrentState = false;
-    }
-
-	void changeStateRequest(StatesNames id){
-		newState= id;
-		changeStateFlag=true;
-	}
-
-	void changeStateApply(){
-		if (changeStateFlag){
-			setCurrentState(newState);
-			changeStateFlag=false;
-		}
-	}
+    void render() override;
 };
+
