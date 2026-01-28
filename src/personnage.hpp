@@ -19,7 +19,7 @@ class personnage {
 		
 		sf::Texture spriteSheet;
 		sf::Sprite character;	
-		std::string character_type;	//Le caractère voulu (à complêter avec la page de menu)
+		std::string character_type;	//Le caractère voulu 
 
 		std::array<std::array<sf::IntRect, 8>, 4> postures;
 		int postureAct=0;	//de 0(repos) à 8

@@ -114,7 +114,7 @@ public:
         backButton.afficherBouton(window);
     }
 
-    // Getters pour les collisions (clics souris)
+    // les collisions (clics souris)
     sf::FloatRect getSFXVolumeBounds() { return volumeSFXBar.getGlobalBounds(); }
 	sf::FloatRect getMusicVolumeBounds() { return volumeMusicBar.getGlobalBounds(); }
     sf::FloatRect getDiffBounds(int i) { return diffOptions[i].getGlobalBounds(); }

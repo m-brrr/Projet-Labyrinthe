@@ -10,7 +10,7 @@ class Map : public sf::Drawable, public sf::Transformable {
 	private: 
 			const std::vector<std::vector<int>> &maze;
 			sf::VertexArray m_vertices; //tableau des sommets pour dessiner les tuiles
-			sf::Texture m_tileset; //Texture contenant toutes les tuiles (inutile ici)
+			sf::Texture m_tileset; //Texture contenant toutes les tuiles 
 			float speed=500.f;
 
 			sf::Texture textureDepart;
@@ -111,7 +111,7 @@ class Map : public sf::Drawable, public sf::Transformable {
 		    sf::Vector2f playerScreenPos(400.f, 300.f);
 		    
 		    // Calculer l'offset de déplacement (inverse car la carte bouge en sens opposé)
-		    sf::Vector2f offset = getMov(dt, maDirection);  // ← Utilise ta fonction getMov
+		    sf::Vector2f offset = getMov(dt, maDirection);  
 		    
 		    // Nouvelle position de la carte
 		    sf::Vector2f newMapPos = this->getPosition() + offset;
@@ -120,7 +120,7 @@ class Map : public sf::Drawable, public sf::Transformable {
 		    sf::Vector2f playerAbsPos = playerScreenPos - newMapPos;
 		    
 		    // Vérifier si le mouvement est valide
-		    if (canMovePlayer(playerAbsPos, tileWidth)) {  // ← Nouvelle fonction simplifiée
+		    if (canMovePlayer(playerAbsPos, tileWidth)) {  
 		        this->setPosition(newMapPos);
 		    }
 		}
@@ -135,11 +135,10 @@ class Map : public sf::Drawable, public sf::Transformable {
 		    throw std::invalid_argument("problème de direction");
 		}
 
-		// Nouvelle fonction pour vérifier la position du joueur (sans sprite en paramètre)
 		bool canMovePlayer(sf::Vector2f playerAbsPos, float tileWidth) {
 		    // Dimensions du joueur (à adapter selon ton sprite)
 		    float width = 50.f;   // Largeur réelle du personnage
-		    float height = 50.f;  // Hauteur de ton personnage
+		    float height = 50.f;  // Hauteur ------------
 		    
 		    std::vector<sf::Vector2f> pointsToCheck = {
 		        {playerAbsPos.x - width/2, playerAbsPos.y - height/2}, // Coin haut-gauche
@@ -166,7 +165,7 @@ class Map : public sf::Drawable, public sf::Transformable {
 		    return true;
 		}
 
-		// Garde ton ancien canMove pour les autres usages (ennemis par exemple)
+		// canMove pour les autres sprites
 		bool canMove(const sf::Sprite& theSprite, sf::Vector2f absNewPosition, float tileWidth) {//prend la position absolue et renvoie s'il peut bouger
 		    
 		    float width = theSprite.getGlobalBounds().width;
@@ -206,16 +205,13 @@ class Map : public sf::Drawable, public sf::Transformable {
 		}
 
 		bool didWin(int H, int L, float tileWidth) {
-		    // 1. Calculer où se trouve le joueur (centre écran) par rapport au (0,0) de la carte
-		    // PositionEcran - PositionCarte = PositionDansLeLabyrinthe
+		    
 		    sf::Vector2f playerScreenPos(400.f, 300.f);
 		    sf::Vector2f playerAbsPos = playerScreenPos - this->getPosition();
 
-		    // 2. Définir la zone de victoire (ex: la dernière colonne du labyrinthe)
 		    float winThresholdX = (L - 1) * tileWidth; 
 		    float winThresholdY = (H - 1) * tileWidth;
 
-		    // 3. Condition : Le joueur a dépassé la limite vers la droite (ou le bas)
 		    if (playerAbsPos.x > winThresholdX || playerAbsPos.y > winThresholdY) {
 		        return true;
 		    }

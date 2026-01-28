@@ -10,7 +10,7 @@ private:
 	std::vector<std::string> names = {"Child", "CowBoy", "Princess", "Warrior"};
     std::vector<sf::Texture> charactersTextures;
     std::vector<sf::Sprite> charactersSprites;
-    std::vector<sf::Text> nameOptions; // Anciennement diffOptions
+    std::vector<sf::Text> nameOptions; 
     
     sf::Font font;
     const int spriteWidth = 77;
@@ -76,7 +76,7 @@ public:
 	std::string getCharacterChosen(int i){
 		return names[i];
 	}
-	
+
     void updateChoiceVisual(int currentChoice) {
         for (int i = 0; i < 3; ++i) {
             nameOptions[i].setFillColor(i == currentChoice ? sf::Color::Red : sf::Color::White);
@@ -97,7 +97,7 @@ public:
 	    backButton.afficherBouton(window);
 	}
 
-    // Getters pour les collisions (clics souris)
+    // les  clics souris
     
     sf::FloatRect getDiffBounds(int i) { return nameOptions[i].getGlobalBounds(); }
     sf::FloatRect getBackBounds() { return backButton.getGlobalBounds(); }

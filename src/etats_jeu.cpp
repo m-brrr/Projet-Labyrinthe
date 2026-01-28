@@ -8,16 +8,17 @@ GameState::GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSo
 		    monPerso(Direction::Up, persoChoisi), 
 		    grilleLaby(H, L),
 		    theMap(grilleLaby.get_grille()),
-		    myView() // Pas de virgule ici
+		    myView(),
+			tileWidth(machine.getTileWidth()),
+			nbEnemis(machine.getNbEnemis())
 
-		{ // Début du corps du constructeur
+		{ 
 		    std::cout << "generation du monde en cours..." << std::endl;
 		    
 		    theMap.load(sf::Vector2u(150, 150), grilleLaby.get_grille(), L, H);
 		    lightmap.create(800, 600);
-		    myView.initializeExitLight(grilleLaby.get_grille(), sf::Vector2f ((L - 1) * 150.f, (H - 1) * 150.f), 150.f);
-		    // On peut maintenant appeler la fonction car allEnemies est prêt
-		    generer_enemis(150.f);
+		    myView.initializeExitLight(grilleLaby.get_grille(), sf::Vector2f ((L - 1) * tileWidth, (H - 1) * tileWidth), tileWidth);
+		    generer_enemis();
 		}
 
 void GameState::handleEvent() {	//méthode de gestion des entrées ponctuelles (à chaque Frame, c'est juste un parcourt rapide du buffer des évenemengts)
@@ -59,7 +60,7 @@ void GameState::update(float dt)  {
 					
 				        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))	
 			            {	
-							theMap.moveTheMap(dt, Direction::Left, 150.f);
+							theMap.moveTheMap(dt, Direction::Left, tileWidth);
 							LabyMov=theMap.getMov(dt, Direction::Left);
 
 							monPerso.setDirection(Direction::Left);
@@ -67,7 +68,7 @@ void GameState::update(float dt)  {
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 			            {
-							theMap.moveTheMap( dt, Direction::Right, 150.f);
+							theMap.moveTheMap( dt, Direction::Right, tileWidth);
 							LabyMov=theMap.getMov(dt, Direction::Right);
 
 							monPerso.setDirection(Direction::Right);
@@ -75,7 +76,7 @@ void GameState::update(float dt)  {
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			            {
-							theMap.moveTheMap( dt, Direction::Up, 150.f);
+							theMap.moveTheMap( dt, Direction::Up, tileWidth);
 							LabyMov=theMap.getMov(dt, Direction::Up);
 
 							monPerso.setDirection(Direction::Up);
@@ -83,7 +84,7 @@ void GameState::update(float dt)  {
 						}
 				        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			            {
-							theMap.moveTheMap (dt, Direction::Down, 150.f);
+							theMap.moveTheMap (dt, Direction::Down, tileWidth);
 							LabyMov=theMap.getMov(dt, Direction::Down);
 
 							monPerso.setDirection(Direction::Down);
@@ -103,14 +104,14 @@ void GameState::update(float dt)  {
 						sf::Vector2f playerPos= sf::Vector2f(400.f,300.f)-mapPos;
 
 					//On vérifie si le joueur a gagné 
-						if(theMap.didWin(H,L,150.f)) {
+						if(theMap.didWin(H,L,tileWidth)) {
 							machine.addState(StatesNames::HappyEnd, std::move(std::make_unique<WinState>(machine, window, regieSon)));
                 			machine.changeStateRequest(StatesNames::HappyEnd);
 						}
 						
 					//Mise à jour des enemis
 						for (auto it = allEnemies.begin(); it != allEnemies.end(); ) {
-							(*it)->update(playerPos,grilleLaby.get_grille(),150.f,dt, spells, theMap, regieSon);
+							(*it)->update(playerPos,grilleLaby.get_grille(),tileWidth,dt, spells, theMap, regieSon);
 							
 							++it; // Passe au monstre suivant
 						}
@@ -121,7 +122,7 @@ void GameState::update(float dt)  {
 							//on met à jour la position du spell, sauf s'il rencontre un mur.
 							sf::Sprite* theSpellSprite=(*it)->getSprite();
 							//bool toucheMur=theMap.canMove(it,  )
-							if(!(*it)->setPosition(dt, theMap, 150.f)) spellDestroyed=true;
+							if(!(*it)->setPosition(dt, theMap, tileWidth)) spellDestroyed=true;
 							(*it)->Spell_animateMov();
 							
 
@@ -167,8 +168,8 @@ void GameState::update(float dt)  {
 						}
 
 						//on update le rayCasting avant affichage
-						sf::Vector2f exitPosWorld((L - 1) * 150.f, (H - 1) * 150.f);
-						myView.update(grilleLaby.get_grille(), playerPos, 150.f, exitPosWorld,theMap.getExitGlowClock());
+						sf::Vector2f exitPosWorld((L - 1) * tileWidth, (H - 1) * tileWidth);
+						myView.update(grilleLaby.get_grille(), playerPos, tileWidth, exitPosWorld,theMap.getExitGlowClock());
 						myView.setPosition(mapPos);	
 }
 
@@ -199,7 +200,7 @@ void GameState::render() {		//méthode pour tout afficher
 			window.display();
 		}
 
-void GameState::generer_enemis(float tileWidth) {
+void GameState::generer_enemis() {
     std::vector<sf::Vector2i> emptyTiles;
 	std::vector<std::vector<int>> maze=grilleLaby.get_grille();
     //Lister toutes les cases avec des 0 (libres)
@@ -211,7 +212,7 @@ void GameState::generer_enemis(float tileWidth) {
         }
     }
 
-    // 2. Générer les ennemis
+    // Générer les ennemis
     std::random_device rd;
     std::mt19937 gen(rd());
     
@@ -329,7 +330,9 @@ void BreakState::handleEvent() {
 				regieSon.playMusic(MusicNames::MusicMenu);
             }
 			if (pause.SettingsIsPressed(mousePos)) {
-                // machine.changeState(new MenuState(machine, fenetre));
+                regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+                machine.addState(StatesNames::Settings, std::move(std::make_unique<SettingsState>(machine, window, regieSon)));
+                machine.changeStateRequest(StatesNames::Settings);
             }
         }
     }
@@ -417,6 +420,7 @@ void SettingsState::handleEvent()  {
                     if (affichagereglages.getDiffBounds(i).contains(mPos)) {
                         difficultéInterne = i;
                         affichagereglages.updateDifficultyVisual(i);
+						machine.setNbEnemis((i+1)*5);
                         regieSon.jouerSon(SoundEffectNames::Click, 100.f);
                     }
                 }

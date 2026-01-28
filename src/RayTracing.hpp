@@ -34,12 +34,13 @@ public:
         m_exitLightVertices.setPrimitiveType(sf::TriangleFan);
     }
     
-    // Initialiser la lumière de sortie (appelé UNE SEULE FOIS au début)
+	//Partie "LUMIERE SORTIE" -> inefficace
+    // Initialiser la lumière de sortie 
     void initializeExitLight(const std::vector<std::vector<int>>& maze, 
                              sf::Vector2f exitPos, int tileWidth) {
         if (m_exitLightInitialized) return;  // Déjà fait
         
-        // Calculer le raycasting UNE SEULE FOIS
+        // Calculer le raycasting
         std::vector<sf::Vector2f> exitLightPoints = exitRayCasting(maze, exitPos, tileWidth);
         m_exitLightPointsCached = sortPoint(exitLightPoints, exitPos);
         
@@ -49,7 +50,7 @@ public:
     void update(const std::vector<std::vector<int>>& maze, sf::Vector2f playerPos, 
                 int tileWidth, sf::Vector2f exitPos, sf::Clock& glowClock) {
         
-        // ========== VISION DU JOUEUR (recalculée chaque frame) ==========
+        // Vision joueur
         m_vertices.clear();
         std::vector<sf::Vector2f> sortedPoints = sortPoint(rayCasting(maze, playerPos, tileWidth), playerPos);
         
@@ -74,11 +75,11 @@ public:
             m_vertices.append(closingVertex);
         }
         
-        // ========== LUMIÈRE DE SORTIE (juste mettre à jour l'animation) ==========
+        // lumière de sortie
         updateExitLightAnimation(exitPos, glowClock);
     }
     
-    // Seulement mettre à jour l'animation (pas le raycasting !)
+    // Seulement mettre à jour l'animation 
     void updateExitLightAnimation(sf::Vector2f exitPos, sf::Clock& glowClock) {
         if (!m_exitLightInitialized || m_exitLightPointsCached.empty()) return;
         
@@ -94,7 +95,7 @@ public:
         centerVertex.color = sf::Color(255, 250, 230, alpha);
         m_exitLightVertices.append(centerVertex);
         
-        // Utiliser les points CACHÉS (pas de recalcul !)
+        // Utiliser les points déjà calculés
         for (const auto& point : m_exitLightPointsCached) {
             sf::Vertex newVertex;
             newVertex.position = point;
@@ -109,7 +110,7 @@ public:
         m_exitLightVertices.append(closingVertex);
     }
     
-    // Raycasting depuis la sortie (appelé UNE SEULE FOIS)
+    // Raycasting depuis la sortie (appelée seule fois à l'initialisation)
     std::vector<sf::Vector2f> exitRayCasting(const std::vector<std::vector<int>>& maze, 
                                              sf::Vector2f exitPos, int tileWidth) {
         std::vector<sf::Vector2f> proximateCorner = listProximateCorner(maze, exitPos, tileWidth);
@@ -129,7 +130,6 @@ public:
         return lightPoints;
     }
     
-    // Tes fonctions existantes...
     std::vector<sf::Vector2f> rayCasting(const std::vector<std::vector<int>>& maze, 
                                          sf::Vector2f playerPos, int tileWidth) {
         std::vector<sf::Vector2f> proximateCorner = listProximateCorner(maze, playerPos, tileWidth);

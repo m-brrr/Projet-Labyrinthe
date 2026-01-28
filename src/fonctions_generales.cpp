@@ -12,7 +12,7 @@ sf::Vector2f getRayImpact(sf::Vector2f playerPos, float angle, const std::vector
 	        std::abs(1.0f / (rayDir.y == 0 ? 1e-10f : rayDir.y))
 	    );
 
-	    // Position du perso dans la matrice (static_cast pour convertir en entier de façon sécurité)
+	    // Position du perso dans la matrice (static_cast pour convertir en entier)
 	    int mapX = static_cast<int>(playerPos.x / tileWidth);
 	    int mapY = static_cast<int>(playerPos.y / tileWidth);
 
@@ -35,10 +35,10 @@ sf::Vector2f getRayImpact(sf::Vector2f playerPos, float angle, const std::vector
 	        sideDist.y = (mapY + 1.0f - playerPos.y / tileWidth) * deltaDist.y;
 	    }
 
-	    // Boucle DDA : on avance jusqu'à toucher un mur (1)
+	    // Boucle DDA : on avance jusqu'à toucher un mur
 	    bool hit = false;
 	    float dist = 0;
-	    int maxRange = 20; // Limite de portée pour éviter les boucles infinies
+	    int maxRange = 20; // Limite de portée (on a eu des pb e boucles infinies)
 	    int steps = 0;
 
 	    while (!hit && steps < maxRange) {
@@ -72,7 +72,7 @@ sf::Vector2f getRayImpact(sf::Vector2f playerPos, float angle, const std::vector
 		if (!hit) {
 		    dist = maxRange;
 		}
-		//La lumière va comme ça illuminer 50% du mur, en fondu
+		//La lumière illuminer 50% du mur, en fondu
 		float wallPenetration=0.5f;
 		dist+=wallPenetration;
 

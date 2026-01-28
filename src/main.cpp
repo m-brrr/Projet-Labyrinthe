@@ -12,8 +12,8 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(800,600), "Labyrinthe");
     StateMachine machine;
 	Son regieSon;
-    machine.addState(StatesNames::HappyEnd, std::make_unique<WinState>(machine, window,regieSon));
-	machine.setCurrentState(StatesNames::HappyEnd);
+    machine.addState(StatesNames::Menu, std::make_unique<MenuState>(machine, window,regieSon));
+	machine.setCurrentState(StatesNames::Menu);
 	regieSon.playMusic(MusicNames::MusicMenu);
 
 	sf::Clock gameClock;

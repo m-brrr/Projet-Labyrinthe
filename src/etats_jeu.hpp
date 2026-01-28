@@ -58,6 +58,8 @@ class GameState : public State {
 		std::vector<std::unique_ptr<Spell>> spells;
 		std::vector<std::unique_ptr<monster>> allEnemies;
 		int nbEnemis=5;
+		float tileWidth=150.f;
+
 		sf::RenderTexture lightmap;
 		sf::Sprite lightSprite;
 		WhatUSee myView;
@@ -69,7 +71,7 @@ class GameState : public State {
 		GameState(StateMachine& machine, sf::RenderWindow& fenetre, Son& leSon);
 
 	//Méthodes : 
-		void generer_enemis(float tileWidth);
+		void generer_enemis();
 		void handleEvent() override;
 		void update(float dt) override;	//Mise à jour des données de vie et de niveau du perso
 		void render() override;
@@ -147,9 +149,7 @@ public:
 
     void handleEvent() override;
 
-    void update(float dt) override {
-        // Ici, on pourrait ajouter des animations fluides si besoin
-    }
+    void update(float dt) override {}
 
     void render() override;
 };
@@ -164,9 +164,7 @@ public:
 
     void handleEvent() override;
 
-    void update(float dt) override {
-        // Ici, on pourrait ajouter des animations fluides si besoin
-    }
+    void update(float dt) override {}
 
     void render() override;
 };

@@ -9,6 +9,8 @@ private:
     bool hasCurrentState = false;
 	bool changeStateFlag = false;
 	std::string persoChoisi="Child";
+	float tileWidth = 150.f;
+	int nbEnemis=5;
 
 
 public:
@@ -17,13 +19,11 @@ public:
         states[id] = std::move(newState); 
     }
 
-    // Change l'état actif avec vérification de sécurité
     void setCurrentState(StatesNames id) {
             currentState = id;
             hasCurrentState = true;
     }
 
-    // Accesseur rapide pour l'état actuel
     State* getCurrent() {
         return hasCurrentState ? states[currentState].get() : nullptr;
     }
@@ -46,7 +46,6 @@ public:
         }
     }
 
-    // Supprimer un état pour libérer de la mémoire
     void removeState(StatesNames id) {
         states.erase(id);
         if (currentState == id) hasCurrentState = false;
@@ -67,4 +66,10 @@ public:
 	void setPersoName(const std::string& name) { persoChoisi = name; }
 
 	std::string getPersoName(){return persoChoisi;}
+
+	void setNbEnemis(int nb){nbEnemis=nb;}
+
+	int getNbEnemis(){return nbEnemis;}
+	
+	float getTileWidth(){return tileWidth;}
 };
