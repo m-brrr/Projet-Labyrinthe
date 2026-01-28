@@ -149,7 +149,8 @@ void GameState::update(float dt)  {
 						}
 
 						//on update le rayCasting avant affichage
-						myView.update(grilleLaby.get_grille(),playerPos, 150);
+						sf::Vector2f exitPosWorld((L - 1) * 150.f, (H - 1) * 150.f);
+						myView.update(grilleLaby.get_grille(), playerPos, 150.f, exitPosWorld,theMap.getExitGlowClock());
 						myView.setPosition(mapPos);	
 }
 
@@ -162,7 +163,7 @@ void GameState::render() {		//méthode pour tout afficher
 			window.clear();
 			
 			window.draw(theMap);
-			theMap.afficher_porte(window);
+			theMap.afficher_porte(window, L, H);
 
 			monPerso.afficher_perso(window);
 			for (const auto& pmonster : allEnemies){

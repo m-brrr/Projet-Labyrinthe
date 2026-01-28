@@ -12,8 +12,15 @@ class Map : public sf::Drawable, public sf::Transformable {
 			sf::VertexArray m_vertices; //tableau des sommets pour dessiner les tuiles
 			sf::Texture m_tileset; //Texture contenant toutes les tuiles (inutile ici)
 			float speed=500.f;
-			sf::Texture textureSheet;
+
+			sf::Texture textureDoor;
 			sf::Sprite doorSprite;
+
+			sf::Texture textureArrivee;
+			sf::Sprite arriveeSprite;
+			sf::Clock exitGlowClock;
+
+
 			void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
 				 // Applique la transformation s'il y en a une (position, rotation, échelle)
 			    states.transform *= getTransform();
@@ -28,21 +35,28 @@ class Map : public sf::Drawable, public sf::Transformable {
 	public :
 		Map(const std::vector<std::vector<int>> &laby) : maze(laby){
 			this->setPosition(350.f,100.f);
-			std::string path = "./assets/autre/doorLocked.png";
 
-			if (!textureSheet.loadFromFile(path)) {	//On vérifie que le chargement se soit bien passé
-			        throw std::runtime_error("Échec du chargement de l'asset : " + path);	//permet de lever une exception
+			if (!textureDoor.loadFromFile("./assets/autre/doorLocked.png")) {	//On vérifie que le chargement se soit bien passé
+			        throw std::runtime_error("Échec du chargement de l'asset : ./assets/autre/doorLocked.png");	//permet de lever une exception
 			}
 			
-			//Créer le spellSprite
-				doorSprite.setTexture(textureSheet);
+			if (!textureArrivee.loadFromFile("./assets/autre/arrivee.png")) {	//On vérifie que le chargement se soit bien passé
+			        throw std::runtime_error("Échec du chargement de l'asset : ./assets/autre/arrivee.png" );	//permet de lever une exception
+			}
 
-			//La taille du spellSprite est de 106x10
-				const int spriteWidth=58;
-				const int spriteHeight=140;	
+			//Créer le spellSprite
+				doorSprite.setTexture(textureDoor);
+				arriveeSprite.setTexture(textureArrivee);
+
+			//La taille du spriteDoor est de 106x10
+				const int spriteWidthDoor=58;
+				const int spriteHeightDoor=140;	
 
 				doorSprite.setScale(150.f/140.f, 150.f/58.f);
 				doorSprite.setPosition(0.f,150.f);
+
+			//taille du spriteArrivee est de 20x32
+				arriveeSprite.setScale(150.f/20.f, 150.f/32.f);
 		}
 
 
@@ -183,13 +197,14 @@ class Map : public sf::Drawable, public sf::Transformable {
 		    return true;
 		}
 
-		void afficher_porte(sf::RenderWindow& window){
-		    // Positionner la porte par rapport à la carte avant de dessiner
-		    // (Sinon elle restera fixe à l'écran en 0, 150)
+		void afficher_porte(sf::RenderWindow& window, int L, int H){
 		    sf::Vector2f mapPos = this->getPosition();
+
 		    doorSprite.setPosition(mapPos.x -58.f, mapPos.y + 100.f); 
-		    
-		    window.draw(doorSprite); // Syntaxe standard SFML
+			sf::Vector2f exitPosWorld((L - 1) * 150.f, (H - 2) * 150.f);
+		    arriveeSprite.setPosition(mapPos+exitPosWorld);
+		    window.draw(doorSprite);
+			window.draw(arriveeSprite);
 		}
 
 		bool didWin(int H, int L, float tileWidth) {
@@ -208,5 +223,9 @@ class Map : public sf::Drawable, public sf::Transformable {
 		    }
 
 		    return false;
+		}
+
+		sf::Clock& getExitGlowClock(){
+			return exitGlowClock;
 		}
 };

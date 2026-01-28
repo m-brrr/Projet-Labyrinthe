@@ -55,7 +55,7 @@ class GameState : public State {
 		
 		std::vector<std::unique_ptr<Spell>> spells;
 		std::vector<std::unique_ptr<monster>> allEnemies;
-		int nbEnemis=0;
+		int nbEnemis=5;
 		sf::RenderTexture lightmap;
 		sf::Sprite lightSprite;
 		WhatUSee myView;
@@ -75,7 +75,7 @@ class GameState : public State {
 		    
 		    theMap.load(sf::Vector2u(150, 150), grilleLaby.get_grille(), L, H);
 		    lightmap.create(800, 600);
-		    
+		    myView.initializeExitLight(grilleLaby.get_grille(), sf::Vector2f ((L - 1) * 150.f, (H - 1) * 150.f), 150.f);
 		    // On peut maintenant appeler la fonction car allEnemies est prêt
 		    generer_enemis(150.f);
 		}

@@ -28,7 +28,7 @@ class personnage {
 		std::string typeDeSpell="BlueFireBall";
 		float HealthMax=1000;
 		float HealthPoint = 1000;
-		int Level=1;
+		int Level;
 		float animationDelay=0.1;
 
 		sf::Clock animation_clock;	//chaque personnage a sa propre horloge pour ses animations
@@ -164,6 +164,7 @@ class playerPerso : public personnage {
 			character.setPosition(400.f,300.f);
 			soundVolume=20.f;
 			attackDelay=0.1f;
+			Level=2;
 		}
 
 		void take_damage(int spellLevel) override {
@@ -207,6 +208,7 @@ class monster : public personnage {
 			theState=EnemyState::Patrol;
 			soundVolume=0;
 			attackDelay=0.5f;
+			Level=1;
 		}
 
 		void update(sf::Vector2f playerPos, const std::vector<std::vector<int>>& maze, float tileWidth, float dt, std::vector<std::unique_ptr<Spell>>& Spells,  Map &theMap, Son& regieSon){

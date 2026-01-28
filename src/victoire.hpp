@@ -42,14 +42,14 @@ class affichage_victoire {
 
 		    // Centrage du titre
 		    Nom_Jeu.setOrigin(Nom_Jeu.getLocalBounds().width / 2, Nom_Jeu.getLocalBounds().height / 2);
-		    Nom_Jeu.setPosition(400, 150);
+		    Nom_Jeu.setPosition(400, 50);
 
 		    subNom_Jeu.setFont(font1);
 		    subNom_Jeu.setString("Vous avez reussi a sortir en s");
 		    subNom_Jeu.setCharacterSize(30);
 		    subNom_Jeu.setFillColor(sf::Color::White);
 		    subNom_Jeu.setOrigin(subNom_Jeu.getLocalBounds().width / 2.f, subNom_Jeu.getLocalBounds().height / 2.f);
-		    subNom_Jeu.setPosition(400, 250);
+		    subNom_Jeu.setPosition(400, 150);
 
 			
 		}
