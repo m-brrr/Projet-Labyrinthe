@@ -46,6 +46,6 @@ Espace : pour lancer un sort d'attaque
 Échap : pour Mettre le jeu en pause
 Souris : Naviguer dans les menus
 
----------------------------------
+-----------------------------
 
 Amusez vous !
