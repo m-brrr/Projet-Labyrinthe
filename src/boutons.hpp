@@ -64,4 +64,8 @@ public:
         window.draw(shape);
         window.draw(text);
     }
+
+	sf::FloatRect getGlobalBounds(){
+		return shape.getGlobalBounds();
+	}
 };

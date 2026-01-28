@@ -13,8 +13,8 @@ class Map : public sf::Drawable, public sf::Transformable {
 			sf::Texture m_tileset; //Texture contenant toutes les tuiles (inutile ici)
 			float speed=500.f;
 
-			sf::Texture textureDoor;
-			sf::Sprite doorSprite;
+			sf::Texture textureDepart;
+			sf::Sprite departSprite;
 
 			sf::Texture textureArrivee;
 			sf::Sprite arriveeSprite;
@@ -36,8 +36,8 @@ class Map : public sf::Drawable, public sf::Transformable {
 		Map(const std::vector<std::vector<int>> &laby) : maze(laby){
 			this->setPosition(350.f,100.f);
 
-			if (!textureDoor.loadFromFile("./assets/autre/doorLocked.png")) {	//On vérifie que le chargement se soit bien passé
-			        throw std::runtime_error("Échec du chargement de l'asset : ./assets/autre/doorLocked.png");	//permet de lever une exception
+			if (!textureDepart.loadFromFile("./assets/autre/depart.png")) {	//On vérifie que le chargement se soit bien passé
+			        throw std::runtime_error("Échec du chargement de l'asset : ./assets/autre/depart.png");	//permet de lever une exception
 			}
 			
 			if (!textureArrivee.loadFromFile("./assets/autre/arrivee.png")) {	//On vérifie que le chargement se soit bien passé
@@ -45,15 +45,13 @@ class Map : public sf::Drawable, public sf::Transformable {
 			}
 
 			//Créer le spellSprite
-				doorSprite.setTexture(textureDoor);
+				departSprite.setTexture(textureDepart);
 				arriveeSprite.setTexture(textureArrivee);
 
-			//La taille du spriteDoor est de 106x10
-				const int spriteWidthDoor=58;
-				const int spriteHeightDoor=140;	
+			//La taille du departSprite est de 32x32
 
-				doorSprite.setScale(150.f/140.f, 150.f/58.f);
-				doorSprite.setPosition(0.f,150.f);
+				departSprite.setScale(150.f/32.f, 150.f/32.f);
+				departSprite.setRotation(90.f);
 
 			//taille du spriteArrivee est de 20x32
 				arriveeSprite.setScale(150.f/20.f, 150.f/32.f);
@@ -200,10 +198,10 @@ class Map : public sf::Drawable, public sf::Transformable {
 		void afficher_porte(sf::RenderWindow& window, int L, int H){
 		    sf::Vector2f mapPos = this->getPosition();
 
-		    doorSprite.setPosition(mapPos.x -58.f, mapPos.y + 100.f); 
+		    departSprite.setPosition(mapPos.x, mapPos.y + 150.f); 
 			sf::Vector2f exitPosWorld((L - 1) * 150.f, (H - 2) * 150.f);
 		    arriveeSprite.setPosition(mapPos+exitPosWorld);
-		    window.draw(doorSprite);
+		    window.draw(departSprite);
 			window.draw(arriveeSprite);
 		}
 

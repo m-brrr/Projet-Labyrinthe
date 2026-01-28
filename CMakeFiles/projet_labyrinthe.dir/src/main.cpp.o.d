@@ -290,6 +290,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/fonctions_generales.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/sorts.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/gameFilter.hpp \
+ /usr/include/c++/13/format \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/gestion_son.hpp \
  /usr/include/SFML/Audio.hpp /usr/include/SFML/Audio/InputSoundFile.hpp \
  /usr/include/SFML/Audio/Export.hpp /usr/include/SFML/Audio/Listener.hpp \
@@ -314,4 +315,5 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/boutons.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_menu.hpp \
  /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/victoire.hpp \
- /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_pause.hpp
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/page_pause.hpp \
+ /home/marti/Info_perso/apprentissage_C++/projet_labyrinthe/src/Settings.hpp

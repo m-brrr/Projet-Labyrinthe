@@ -16,7 +16,7 @@ class Son {
 
 		float masterVolume = 100.f;
 	    float sfxVolume = 100.f;
-	    float musicVolume = 50.f;
+	    float musicVolume = 100.f;
 	
 	public :
 
@@ -128,5 +128,11 @@ class Son {
 	        gameMusic.setVolume(musicVolume);
 	    }
 	
-		
+		float getSFXVolume() const{
+			return sfxVolume;
+		}
+
+		float getMusicVolume() const{
+			return musicVolume;
+		}
 	};

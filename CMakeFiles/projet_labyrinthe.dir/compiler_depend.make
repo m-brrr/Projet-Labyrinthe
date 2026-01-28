@@ -3,6 +3,7 @@
 
 CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   src/RayTracing.hpp \
+  src/Settings.hpp \
   src/boutons.hpp \
   src/enum_types.hpp \
   src/etats_jeu.hpp \
@@ -238,6 +239,7 @@ CMakeFiles/projet_labyrinthe.dir/src/etats_jeu.cpp.o: src/etats_jeu.cpp \
   /usr/include/c++/13/ext/numeric_traits.h \
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
+  /usr/include/c++/13/format \
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
@@ -1080,6 +1082,7 @@ CMakeFiles/projet_labyrinthe.dir/src/labyrinthe.cpp.o: src/labyrinthe.cpp \
 
 CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   src/RayTracing.hpp \
+  src/Settings.hpp \
   src/boutons.hpp \
   src/enum_types.hpp \
   src/etats_jeu.hpp \
@@ -1315,6 +1318,7 @@ CMakeFiles/projet_labyrinthe.dir/src/main.cpp.o: src/main.cpp \
   /usr/include/c++/13/ext/numeric_traits.h \
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
+  /usr/include/c++/13/format \
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
@@ -1634,6 +1638,8 @@ src/labyrinthe.cpp:
 
 /usr/include/c++/13/ratio:
 
+/usr/include/c++/13/pstl/pstl_config.h:
+
 /usr/include/c++/13/bits/basic_ios.tcc:
 
 /usr/include/c++/13/pstl/execution_defs.h:
@@ -1784,15 +1790,31 @@ src/personnage.hpp:
 
 /usr/include/SFML/Audio/SoundFileFactory.inl:
 
+/usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h:
+
+/usr/include/SFML/Graphics/Texture.hpp:
+
 /usr/include/SFML/System/ThreadLocalPtr.inl:
 
 /usr/include/SFML/Audio.hpp:
+
+/usr/include/SFML/Audio/InputSoundFile.hpp:
+
+src/etats_jeu.hpp:
 
 /usr/include/SFML/Graphics/CircleShape.hpp:
 
 /usr/include/SFML/Graphics/Shape.hpp:
 
 src/victoire.hpp:
+
+/usr/include/SFML/Audio/Listener.hpp:
+
+src/etats_jeu.cpp:
+
+/usr/include/SFML/Audio/AlResource.hpp:
+
+/usr/include/SFML/System/Lock.hpp:
 
 /usr/include/SFML/Audio/SoundBuffer.hpp:
 
@@ -1806,11 +1828,15 @@ src/victoire.hpp:
 
 src/boutons.hpp:
 
+src/fonctions_generales.hpp:
+
+src/gameFilter.hpp:
+
+/usr/include/SFML/Window/Window.hpp:
+
 src/terrain.hpp:
 
 /usr/include/SFML/System/Utf.hpp:
-
-/usr/include/SFML/Audio/Listener.hpp:
 
 src/game_over.hpp:
 
@@ -1823,6 +1849,8 @@ src/game_over.hpp:
 /usr/include/c++/13/string:
 
 /usr/include/SFML/Audio/SoundSource.hpp:
+
+/usr/include/c++/13/format:
 
 /usr/include/c++/13/bits/allocator.h:
 
@@ -1859,18 +1887,6 @@ src/labyrinthe.hpp:
 /usr/include/SFML/Graphics/Rect.inl:
 
 /usr/include/c++/13/cmath:
-
-src/fonctions_generales.hpp:
-
-src/gameFilter.hpp:
-
-/usr/include/SFML/Window/Window.hpp:
-
-src/etats_jeu.cpp:
-
-/usr/include/SFML/Audio/AlResource.hpp:
-
-/usr/include/SFML/System/Lock.hpp:
 
 /usr/include/c++/13/typeinfo:
 
@@ -1924,6 +1940,12 @@ src/RayTracing.hpp:
 
 /usr/include/SFML/Window/Cursor.hpp:
 
+/usr/include/c++/13/random:
+
+/usr/include/c++/13/bits/random.tcc:
+
+/usr/include/SFML/Graphics/Vertex.hpp:
+
 /usr/include/c++/13/bits/stl_map.h:
 
 /usr/include/c++/13/bits/new_allocator.h:
@@ -1968,6 +1990,10 @@ src/RayTracing.hpp:
 
 /usr/include/SFML/System/MemoryInputStream.hpp:
 
+/usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/c++/13/cwchar:
+
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
 
 /usr/include/c++/13/stack:
@@ -1977,10 +2003,6 @@ src/RayTracing.hpp:
 /usr/include/SFML/Audio/SoundFileReader.hpp:
 
 /usr/include/c++/13/ext/string_conversions.h:
-
-/usr/include/x86_64-linux-gnu/sys/select.h:
-
-/usr/include/c++/13/cwchar:
 
 /usr/include/SFML/Graphics/RenderStates.hpp:
 
@@ -1997,14 +2019,6 @@ src/RayTracing.hpp:
 /usr/include/c++/13/deque:
 
 /usr/include/SFML/Graphics/RenderTexture.hpp:
-
-src/etats_jeu.hpp:
-
-/usr/include/SFML/Audio/InputSoundFile.hpp:
-
-/usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h:
-
-/usr/include/SFML/Graphics/Texture.hpp:
 
 /usr/include/SFML/System/Time.hpp:
 
@@ -2148,6 +2162,8 @@ src/fonctions_generales.cpp:
 
 /usr/include/c++/13/cstddef:
 
+src/Settings.hpp:
+
 /usr/include/c++/13/bits/stl_algobase.h:
 
 /usr/include/c++/13/bits/stl_construct.h:
@@ -2259,11 +2275,3 @@ src/page_menu.hpp:
 /usr/include/c++/13/numeric:
 
 /usr/include/c++/13/pstl/glue_numeric_defs.h:
-
-/usr/include/c++/13/bits/random.tcc:
-
-/usr/include/SFML/Graphics/Vertex.hpp:
-
-/usr/include/c++/13/random:
-
-/usr/include/c++/13/pstl/pstl_config.h:

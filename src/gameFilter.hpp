@@ -5,19 +5,27 @@
 #include <string>
 #include <array>
 #include "enum_types.hpp"
+#include <format>
 
 
 class BarreDeVie {
 	protected :
-		int healthPoints;
+		float healthPoints;
+		int healthMax;
+		//int EnemiTue;
+
 		sf::Texture textureSheet;
 		sf::Sprite spriteBarre;
 		sf::RectangleShape square;
+
+		sf::Font font1;
+		sf::Text PV;
+		//sf::Text EnemiTue;
 		int life; //En % de la vie totale
 		float initialSquareWidth; //taille carré initiale
 
 	public : 
-		BarreDeVie() : healthPoints(100), life(100){
+		BarreDeVie() : healthPoints(1000), healthMax(1000), life(100){
 			std::string path = "./assets/autre/BarreDeVie.png";
 
 			if (!textureSheet.loadFromFile(path)) {	//On vérifie que le chargement se soit bien passé
@@ -33,13 +41,18 @@ class BarreDeVie {
 		}
 
 		void afficherBarreDeVie(sf::RenderWindow &window){
+			PV.setOrigin(PV.getLocalBounds().width / 2, PV.getLocalBounds().height / 2);
+			PV.setPosition(400.f, 500);
+			PV.setString(std::to_string(static_cast<int>(healthPoints))+" pv");
 			window.draw(spriteBarre);
 			window.draw(square);
+			window.draw(PV);
 		}
 
 		void setPercentage(float percentage){	//vie restante en pourcentage de ta vie maximale
 			sf::Vector2f currentSize = square.getSize();
         	square.setSize(sf::Vector2f(initialSquareWidth * percentage, currentSize.y));
+			healthPoints= percentage*healthMax;
 		}
 };
 
@@ -65,6 +78,15 @@ class PlayerBarreDeVie : public BarreDeVie {
 
 			square.setPosition(rectX, rectY);
 			square.setFillColor(sf::Color::Green);
+
+			if (!font1.loadFromFile("./assets/police/endor/ENDORALT.ttf")) {
+		       	throw std::runtime_error( "Erreur : Impossible de charger la police 'Tf'." );
+		    	}
+
+				PV.setFont(font1);
+				PV.setCharacterSize(50);
+			    PV.setFillColor(sf::Color::White);
+			   
 		}
 };
 

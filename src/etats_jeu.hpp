@@ -19,6 +19,7 @@
 #include "sorts.hpp"
 #include "gestion_son.hpp"
 #include "fonctions_generales.hpp"
+#include "Settings.hpp"
 
 class StateMachine; 	//On la déclare juste pour pouvoir l'utiliser après
 
@@ -154,6 +155,28 @@ class WinState : public State{
 		void render() override;
 };
 
+class SettingsState : public State {
+private:
+    AffichageSettings affichagereglages;
+    int difficultéInterne = 1;
+
+public:
+    SettingsState(StateMachine& machine, sf::RenderWindow& window, Son& leSon) 
+        : State(machine, window, leSon) {
+        // Init visuelle avec les valeurs actuelles
+        affichagereglages.updateVolumeSFXVisual(regieSon.getSFXVolume());
+		affichagereglages.updateVolumeMusicVisual(regieSon.getMusicVolume());
+        affichagereglages.updateDifficultyVisual(difficultéInterne);
+    }
+
+    void handleEvent() override;
+
+    void update(float dt) override {
+        // Ici, on pourrait ajouter des animations fluides si besoin
+    }
+
+    void render() override;
+};
 
 /*
 class ChooseCharacterState : public State {

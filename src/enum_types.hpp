@@ -58,7 +58,7 @@ enum class EnemyState {
 };
 
 enum class StatesNames {
-	Menu, Game, GameOver, Pause, HappyEnd
+	Menu, Game, GameOver, Pause, HappyEnd, Settings
 };
 
 enum class SoundEffectNames {

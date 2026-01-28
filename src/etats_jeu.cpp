@@ -268,7 +268,9 @@ void MenuState::handleEvent() {
                 // machine.changeState(new MenuState(machine, fenetre));
             }
 			if (menu.SettingsIsPressed(mousePos)) {
-                // machine.changeState(new MenuState(machine, fenetre));
+                regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+				machine.addState(StatesNames::Settings, std::move(std::make_unique<SettingsState>(machine, window, regieSon)));
+                machine.changeStateRequest(StatesNames::Settings);
             }
         }
     }
@@ -327,8 +329,6 @@ void BreakState::render() {
 
 //Page Victoire :
 
-//Page de Fin de Jeu
-
 void WinState::handleEvent() {
 	sf::Event event;
     while (window.pollEvent(event)) {
@@ -361,3 +361,49 @@ void WinState::render() {
 	victoire.afficherTitre(window);
 	window.display();
 }
+
+//Page settings :
+
+void SettingsState::handleEvent()  {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) window.close();
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2f mPos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                // Logique Volume
+                if (affichagereglages.getSFXVolumeBounds().contains(mPos)) {
+                    float nouveauVolume = (mPos.x - 300) / 3.f;
+                    regieSon.setSFXVolume(nouveauVolume);
+                    affichagereglages.updateVolumeSFXVisual(nouveauVolume);
+                }
+
+				if (affichagereglages.getMusicVolumeBounds().contains(mPos)) {
+                    float nouveauVolume = (mPos.x - 300) / 3.f;
+                    regieSon.setMusicVolume(nouveauVolume);
+                    affichagereglages.updateVolumeMusicVisual(nouveauVolume);
+                }
+
+                // Logique Difficulté
+                for (int i = 0; i < 3; ++i) {
+                    if (affichagereglages.getDiffBounds(i).contains(mPos)) {
+                        difficultéInterne = i;
+                        affichagereglages.updateDifficultyVisual(i);
+                        regieSon.jouerSon(SoundEffectNames::Click, 100.f);
+                    }
+                }
+
+                // Logique Retour
+                if (affichagereglages.getBackBounds().contains(mPos)) {
+                    machine.changeStateRequest(StatesNames::Menu);
+                }
+            }
+        }
+    }
+
+void SettingsState::render() {
+        window.clear();
+        affichagereglages.dessiner(window);
+        window.display();
+    }

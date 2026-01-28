@@ -30,7 +30,7 @@ class affichage_menu {
 		       throw( "Erreur : Impossible de charger la police 'TheyPerished.ttf'." );
 		    }
 
-		    if (!backGroundTexture.loadFromFile("./assets/autre/chemin-dans-la-forêt-sombre-et-effrayante.png")) throw( "Erreur : Impossible de charger l'image de fond." );;
+		    if (!backGroundTexture.loadFromFile("./assets/autre/chemin-dans-la-forêt-sombre-et-effrayante.png")) throw( "Erreur : Impossible de charger l'image de fond." );
 		    
 			backGroundSprite.setTexture(backGroundTexture);
 			backGroundSprite.setScale(800.f / backGroundTexture.getSize().x, 600.f / backGroundTexture.getSize().y);	//redimensionner l'image à la taille de la fenêtre
